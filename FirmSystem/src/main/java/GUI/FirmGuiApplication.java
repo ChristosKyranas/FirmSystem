@@ -1,10 +1,12 @@
 package GUI;
 
 import domain.Branch;
+import service.FirmServiceImpl;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.HashMap;
 import java.util.List;
 
 import static java.lang.Integer.parseInt;
@@ -47,6 +49,7 @@ public class FirmGuiApplication {
     private JTextField textEmployeeAmka;
     private JTextField textEmployeeBranch;
     private JTextField textEmployeeFirm;
+    private JScrollPane firmJScrollPane;
 
     public JPanel getPanel() {
         return panel;
@@ -370,8 +373,20 @@ public class FirmGuiApplication {
         buttonSearchFirm.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                String text = textFirmName.getText();
-                System.out.println(text);
+                FirmServiceImpl firmService = new FirmServiceImpl();
+                HashMap<Integer, String> firm = firmService.findAllFirm();
+                DefaultListModel model = new DefaultListModel();
+                JList jList = new JList(model);
+                System.out.println(firm.size());
+                for ( int i =1; i <= firm.size(); i++){
+                    model.addElement(firm.get(i));
+                    System.out.println(firm.get(i));
+                }
+                setListFirm(jList);
+//                firmJScrollPane = new JScrollPane(getListFirm());
+                firmJScrollPane.setViewportView(jList);
+                /*String text = textFirmName.getText();
+                System.out.println(text);*/
             }
         });
     }
