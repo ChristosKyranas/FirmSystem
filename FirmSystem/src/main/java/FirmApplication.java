@@ -1,6 +1,13 @@
 import GUI.FirmGuiApplication;
+import service.FirmServiceImpl;
+import utils.DatabaseConnection;
 
 import javax.swing.*;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.HashMap;
 
 public class FirmApplication {
 
@@ -10,5 +17,8 @@ public class FirmApplication {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
+
+        FirmServiceImpl firmService = new FirmServiceImpl();
+        firmService.findAllFirm();
     }
 }

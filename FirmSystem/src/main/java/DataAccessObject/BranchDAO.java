@@ -1,6 +1,6 @@
 package DataAccessObject;
 
-import models.Branch;
+import domain.Branch;
 
 import java.util.List;
 

@@ -2,7 +2,7 @@ package utils;
 
 
 
-import models.Database;
+import domain.Database;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -29,18 +29,20 @@ public class DatabaseConnection {
 
     private static Database loadDatabase() {
         Properties properties = new Properties();
-
-        try (InputStream input = DatabaseConnection.class.getClassLoader().getResourceAsStream("application.properties")) {
+        InputStream input = DatabaseConnection.class.getClassLoader().getResourceAsStream("application.properties");
+        try {
             properties.load(input);
-
-            return new Database(
-                    properties.getProperty("database_user"),
-                    properties.getProperty("database_password"),
-                    properties.getProperty("database_url")
-            );
-        } catch (IOException ex) {
-            throw new RuntimeException("Failed to connect to database");
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+
+        return new Database(
+                properties.getProperty("database_user"),
+                properties.getProperty("database_password"),
+                properties.getProperty("database_url")
+        );
+//        return new Database("root", "","jdbc:mysql://localhost:3306/company?useSSL=false");
+
     }
 
    /* public static void main(String[] args) {
