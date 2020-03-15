@@ -1,12 +1,18 @@
 package GUI;
 
+import GUI.initializer.InitializerBranchJScrollPane;
+import GUI.initializer.InitializerFirmJScrollPane;
 import domain.Branch;
+import domain.Firm;
+import factory.InitializerJScrollPaneFactory;
+import service.BranchServiceImpl;
 import service.FirmServiceImpl;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.HashMap;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.List;
 
 import static java.lang.Integer.parseInt;
@@ -50,6 +56,16 @@ public class FirmGuiApplication {
     private JTextField textEmployeeBranch;
     private JTextField textEmployeeFirm;
     private JScrollPane firmJScrollPane;
+    private JScrollPane branchJScrollPane;
+    private JScrollPane employeeJScrollPane;
+
+    public JScrollPane getFirmJScrollPane() {
+        return firmJScrollPane;
+    }
+
+    public void setFirmJScrollPane(JScrollPane firmJScrollPane) {
+        this.firmJScrollPane = firmJScrollPane;
+    }
 
     public JPanel getPanel() {
         return panel;
@@ -67,28 +83,12 @@ public class FirmGuiApplication {
         this.tabbedPane1 = tabbedPane1;
     }
 
-    public JList getListFirm() {
-        return listFirm;
-    }
-
-    public void setListFirm(JList listFirm) {
-        this.listFirm = listFirm;
-    }
-
     public JTextField getTextFirmName() {
         return textFirmName;
     }
 
     public void setTextFirmName(JTextField textFirmName) {
         this.textFirmName = textFirmName;
-    }
-
-    public JButton getButtonSearchFirm() {
-        return buttonSearchFirm;
-    }
-
-    public void setButtonSearchFirm(JButton buttonSearchFirm) {
-        this.buttonSearchFirm = buttonSearchFirm;
     }
 
     public JList getListBranch() {
@@ -131,54 +131,6 @@ public class FirmGuiApplication {
         this.textBranchWorth = textBranchWorth;
     }
 
-    public JButton getButtonCreateBranch() {
-        return buttonCreateBranch;
-    }
-
-    public void setButtonCreateBranch(JButton buttonCreateBranch) {
-        this.buttonCreateBranch = buttonCreateBranch;
-    }
-
-    public JButton getButtonUpdateBranch() {
-        return buttonUpdateBranch;
-    }
-
-    public void setButtonUpdateBranch(JButton buttonUpdateBranch) {
-        this.buttonUpdateBranch = buttonUpdateBranch;
-    }
-
-    public JButton getButtonSearchBranch() {
-        return buttonSearchBranch;
-    }
-
-    public void setButtonSearchBranch(JButton buttonSearchBranch) {
-        this.buttonSearchBranch = buttonSearchBranch;
-    }
-
-    public JButton getButtonCreateFirm() {
-        return buttonCreateFirm;
-    }
-
-    public void setButtonCreateFirm(JButton buttonCreateFirm) {
-        this.buttonCreateFirm = buttonCreateFirm;
-    }
-
-    public JButton getButtonSearchEmployee() {
-        return buttonSearchEmployee;
-    }
-
-    public void setButtonSearchEmployee(JButton buttonSearchEmployee) {
-        this.buttonSearchEmployee = buttonSearchEmployee;
-    }
-
-    public JButton getButtonDeleteBranch() {
-        return buttonDeleteBranch;
-    }
-
-    public void setButtonDeleteBranch(JButton buttonDeleteBranch) {
-        this.buttonDeleteBranch = buttonDeleteBranch;
-    }
-
     public JTextField getTextBranchBudget() {
         return textBranchBudget;
     }
@@ -195,20 +147,20 @@ public class FirmGuiApplication {
         this.textBranchFirm = textBranchFirm;
     }
 
-    public JButton getButtonDeleteFirm() {
-        return buttonDeleteFirm;
-    }
-
-    public void setButtonDeleteFirm(JButton buttonDeleteFirm) {
-        this.buttonDeleteFirm = buttonDeleteFirm;
-    }
-
     public JList getListEmployee() {
         return listEmployee;
     }
 
     public void setListEmployee(JList listEmployee) {
         this.listEmployee = listEmployee;
+    }
+
+    public JList getListFirm() {
+        return listFirm;
+    }
+
+    public void setListFirm(JList listFirm) {
+        this.listFirm = listFirm;
     }
 
     public JTextField getTextEmployeeName() {
@@ -323,33 +275,91 @@ public class FirmGuiApplication {
         this.textEmployeeFirm = textEmployeeFirm;
     }
 
-    public JButton getButtonCreateEmployee() {
-        return buttonCreateEmployee;
-    }
-
-    public void setButtonCreateEmployee(JButton buttonCreateEmployee) {
-        this.buttonCreateEmployee = buttonCreateEmployee;
-    }
-
-    public JButton getButtonUpdateEmployee() {
-        return buttonUpdateEmployee;
-    }
-
-    public void setButtonUpdateEmployee(JButton buttonUpdateEmployee) {
-        this.buttonUpdateEmployee = buttonUpdateEmployee;
-    }
-
-    public JButton getButtonDeleteEmployee() {
-        return buttonDeleteEmployee;
-    }
-
-    public void setButtonDeleteEmployee(JButton buttonDeleteEmployee) {
-        this.buttonDeleteEmployee = buttonDeleteEmployee;
-    }
-
     public FirmGuiApplication() {
+        initializeJSrollPane();
         buttonsFirmPage();
         buttonsBranchPage();
+        activeMouseListener();
+    }
+
+    private void activeMouseListener() {
+
+        listFirm.addMouseListener(new MouseAdapter(){
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                String s = (String) listFirm.getSelectedValue();
+                System.out.println("Value Selected: " + s);
+
+                buttonDeleteFirm.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent actionEvent) {
+
+                        FirmServiceImpl firmService = new FirmServiceImpl();
+                        firmService.removeFirm(s);
+                        InitializerFirmJScrollPane jListFirm = new InitializerFirmJScrollPane(firmJScrollPane);
+                        setListFirm(jListFirm.getjList());
+                        activeMouseListener();
+                    }
+                });
+            }
+        });
+
+        listBranch.addMouseListener(new MouseAdapter(){
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                String s = (String) listBranch.getSelectedValue();
+                System.out.println("Value Selected: " + s);
+                getSelectedInfo(s);
+
+                buttonDeleteBranch.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent actionEvent) {
+
+                        BranchServiceImpl branchService = new BranchServiceImpl();
+                        branchService.removeBranch(s);
+                        InitializerBranchJScrollPane jListBranch = new InitializerBranchJScrollPane(branchJScrollPane);
+                        setListBranch(jListBranch.getjList());
+                    }
+                });
+
+            }
+        });
+
+        listEmployee.addMouseListener(new MouseAdapter(){
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                String s = (String) listEmployee.getSelectedValue();
+                System.out.println("Value Selected: " + s);
+            }
+        });
+
+    }
+
+    private void getSelectedInfo(String s){
+        BranchServiceImpl branchService = new BranchServiceImpl();
+        Branch branch = branchService.findSelectedBranch(s);
+        DefaultListModel model = new DefaultListModel();
+        JList jList = new JList(model);
+
+        textBranchName.setText(branch.getName());
+        textBranchAddress.setText(branch.getAddress());
+        textBranchEstablishment.setText(branch.getEstablishment());
+        textBranchWorth.setText(String.valueOf((long) branch.getWorth()));
+        textBranchBudget.setText(String.valueOf((long) branch.getBudget()));
+        textBranchFirm.setText(String.valueOf(branch.getFirm()));
+    }
+
+    private void initializeJSrollPane() {
+
+//        new InitializerJScrollPaneFactory("firm", firmJScrollPane);
+//
+//        new InitializerJScrollPaneFactory("branch", branchJScrollPane);
+
+        InitializerFirmJScrollPane jListFirm = new InitializerFirmJScrollPane(firmJScrollPane);
+        setListFirm(jListFirm.getjList());
+        InitializerBranchJScrollPane jListBranch = new InitializerBranchJScrollPane(branchJScrollPane);
+        setListBranch(jListBranch.getjList());
+
     }
 
     public void buttonsFirmPage(){
@@ -359,34 +369,21 @@ public class FirmGuiApplication {
             public void actionPerformed(ActionEvent actionEvent) {
                 String text = textFirmName.getText();
                 System.out.println(text);
+                FirmServiceImpl firmService = new FirmServiceImpl();
+                firmService.addFirm(text);
+                InitializerFirmJScrollPane jListFirm = new InitializerFirmJScrollPane(firmJScrollPane);
+                setListFirm(jListFirm.getjList());
+                activeMouseListener();
             }
         });
 
-        buttonDeleteFirm.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                String text = textFirmName.getText();
-                System.out.println(text);
-            }
-        });
+
 
         buttonSearchFirm.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                FirmServiceImpl firmService = new FirmServiceImpl();
-                HashMap<Integer, String> firm = firmService.findAllFirm();
-                DefaultListModel model = new DefaultListModel();
-                JList jList = new JList(model);
-                System.out.println(firm.size());
-                for ( int i =1; i <= firm.size(); i++){
-                    model.addElement(firm.get(i));
-                    System.out.println(firm.get(i));
-                }
-                setListFirm(jList);
-//                firmJScrollPane = new JScrollPane(getListFirm());
-                firmJScrollPane.setViewportView(jList);
-                /*String text = textFirmName.getText();
-                System.out.println(text);*/
+
+
             }
         });
     }
@@ -403,9 +400,9 @@ public class FirmGuiApplication {
                 branch.setName(textBranchName.getText());
                 branch.setAddress(textBranchAddress.getText());
                 branch.setEstablishment(textBranchEstablishment.getText());
-                branch.setWorth(parseInt(textBranchWorth.getText()));
-                branch.setBudget(parseInt(textBranchBudget.getText()));
-                branch.setFirm(textBranchFirm.getText());
+                branch.setWorth(Double.valueOf(textBranchWorth.getText()));
+                branch.setBudget(Double.valueOf(textBranchBudget.getText()));
+                branch.setFirm(Integer.parseInt(textBranchFirm.getText()));
 
                 branch.setListBranch();
                 List<Branch> branchList = branch.getListBranch();
@@ -416,17 +413,7 @@ public class FirmGuiApplication {
             }
         });
 
-        buttonDeleteBranch.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                System.out.println(textBranchName.getText() + "\n"
-                        + textBranchAddress.getText()       + "\n"
-                        + textBranchEstablishment.getText() + "\n"
-                        + textBranchWorth.getText()         + "\n"
-                        + textBranchBudget.getText()        + "\n"
-                        + textBranchFirm.getText());
-            }
-        });
+
 
         buttonUpdateBranch.addActionListener(new ActionListener() {
             @Override

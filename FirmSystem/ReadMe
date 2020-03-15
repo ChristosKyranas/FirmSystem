@@ -1,0 +1,9 @@
+-------------------------------Firm System-------------------------------
+--------------------------------15/3/2020--------------------------------
+*xammp -> MySQL has to be connected
+*Library -> mysql-connector-java-8.0.18
+*application.properties -> database information (username, password, url)
+*diplay double with (long)
+*addMouseListener -> mouseClicked
+*addActionListener -> actionPerformed
+*MySQL gueries -> when we want to get back smt executeQuery otherwise executeUpdate

@@ -10,17 +10,17 @@ public class Branch implements BranchDAO {
     private int branchId;
     private String name;
     private String address;
-    private int budget;
-    private int worth;
+    private double budget;
+    private double worth;
     private String establishment;
-    private String firm;
+    private int firm;
     private List<Branch> listBranch;
 
-    public String getFirm() {
+    public int getFirm() {
         return firm;
     }
 
-    public void setFirm(String firm) {
+    public void setFirm(int firm) {
         this.firm = firm;
     }
 
@@ -52,19 +52,19 @@ public class Branch implements BranchDAO {
         this.address = address;
     }
 
-    public int getBudget() {
+    public double getBudget() {
         return budget;
     }
 
-    public void setBudget(int budget) {
+    public void setBudget(Double budget) {
         this.budget = budget;
     }
 
-    public int getWorth() {
+    public double getWorth() {
         return worth;
     }
 
-    public void setWorth(int worth) {
+    public void setWorth(Double worth) {
         this.worth = worth;
     }
 

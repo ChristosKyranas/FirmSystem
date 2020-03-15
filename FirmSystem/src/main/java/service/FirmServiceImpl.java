@@ -14,24 +14,49 @@ public class FirmServiceImpl implements FirmService {
         Connection conn = null;
         Statement statement = null;
         ResultSet rs = null;
-        HashMap<Integer, String> firm = new HashMap<>();
+        HashMap<Integer, String> firmHashMap = new HashMap<>();
         try {
             DatabaseConnection databaseConnection = new DatabaseConnection();
             conn = databaseConnection.getConnection();
             statement = conn.createStatement();
             rs = statement.executeQuery("Select * from company.firm");
             while(rs.next()){
-                firm.put(Integer.valueOf(rs.getString("firm_id")), rs.getString("name"));
+                firmHashMap.put(Integer.valueOf(rs.getString("firm_id")), rs.getString("name"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        System.out.println("Firms: " + firm.toString());
-        return firm;
+        System.out.println("Firms: " + firmHashMap.toString());
+        return firmHashMap;
     }
 
+    public void addFirm(String firmName){
+        Connection conn = null;
+        Statement statement = null;
+        try {
+            DatabaseConnection databaseConnection = new DatabaseConnection();
+            conn = databaseConnection.getConnection();
+            statement = conn.createStatement();
+            String query = "insert into company.firm (name) values ('"+ firmName +"');";
+            statement.executeUpdate(query);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
-
-
+    public void removeFirm(String firmName){
+        Connection conn = null;
+        Statement statement = null;
+        try {
+            DatabaseConnection databaseConnection = new DatabaseConnection();
+            conn = databaseConnection.getConnection();
+            statement = conn.createStatement();
+            String query = "delete from company.firm where name = '"+ firmName +"'";
+            System.out.println(query);
+            statement.executeUpdate(query);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
 }

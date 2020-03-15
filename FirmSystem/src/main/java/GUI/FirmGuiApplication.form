@@ -122,10 +122,7 @@
                           <component id="13d4e" class="javax.swing.JList" binding="listFirm">
                             <constraints/>
                             <properties>
-                              <model>
-                                <item value="Samsung"/>
-                                <item value="Apple"/>
-                              </model>
+                              <model/>
                             </properties>
                           </component>
                         </children>
@@ -140,7 +137,7 @@
                     <properties/>
                     <border type="none"/>
                     <children>
-                      <scrollpane id="536db">
+                      <scrollpane id="536db" binding="branchJScrollPane">
                         <constraints>
                           <grid row="0" column="0" row-span="1" col-span="2" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                         </constraints>
@@ -150,17 +147,7 @@
                           <component id="3d3cd" class="javax.swing.JList" binding="listBranch">
                             <constraints/>
                             <properties>
-                              <model>
-                                <item value="Samsung - Greece - Athens (Suntagma)"/>
-                                <item value="Samsung - Greece - Athens (Monasthraki)"/>
-                                <item value="Samsung - Greece - Thessaloniki"/>
-                                <item value="Samsung - Greece - Larissa"/>
-                                <item value="Samsung - Greece - Ioannina"/>
-                                <item value="Apple - Greece - Athens"/>
-                                <item value="Apple - Greece - Thessaloniki"/>
-                                <item value="Apple - Greece - Larissa"/>
-                                <item value="Apple - Greece - Ioannina"/>
-                              </model>
+                              <model/>
                             </properties>
                           </component>
                         </children>
@@ -318,7 +305,7 @@
                     <properties/>
                     <border type="none"/>
                     <children>
-                      <scrollpane id="bf78f">
+                      <scrollpane id="bf78f" binding="employeeJScrollPane">
                         <constraints>
                           <grid row="0" column="0" row-span="1" col-span="4" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                         </constraints>
@@ -328,15 +315,7 @@
                           <component id="65136" class="javax.swing.JList" binding="listEmployee">
                             <constraints/>
                             <properties>
-                              <model>
-                                <item value="Christos"/>
-                                <item value="Chris"/>
-                                <item value="Marios"/>
-                                <item value="Maria"/>
-                                <item value="Katia"/>
-                                <item value="Despoina"/>
-                                <item value="Eirhnh"/>
-                              </model>
+                              <model/>
                             </properties>
                           </component>
                         </children>
