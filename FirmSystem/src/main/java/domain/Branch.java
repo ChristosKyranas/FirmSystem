@@ -10,6 +10,33 @@ public class Branch implements BranchDAO {
     private int branchId;
     private String name;
     private String address;
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public void setBudget(double budget) {
+        this.budget = budget;
+    }
+
+    public void setWorth(double worth) {
+        this.worth = worth;
+    }
+
+    private String city;
+    private String country;
     private double budget;
     private double worth;
     private String establishment;

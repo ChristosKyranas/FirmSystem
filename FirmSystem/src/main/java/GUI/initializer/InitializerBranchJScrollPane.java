@@ -8,7 +8,6 @@ import java.util.HashMap;
 
 public class InitializerBranchJScrollPane {
 
-
     private JList jList;
     private DefaultListModel model;
     private BranchServiceImpl branchService;
@@ -21,12 +20,10 @@ public class InitializerBranchJScrollPane {
         model = new DefaultListModel();
         jList = new JList(model);
         for ( int i : branch.keySet()){
-            model.addElement(branch.get(i).getName());
+            model.addElement(branch.get(i).getName() + "--" + branch.get(i).getCountry() + "--" + branch.get(i).getCity());
         }
-
         jScrollPane.setViewportView(jList);
     }
-
 
     public JList getjList() {
         return jList;

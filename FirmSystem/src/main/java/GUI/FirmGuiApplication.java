@@ -3,8 +3,6 @@ package GUI;
 import GUI.initializer.InitializerBranchJScrollPane;
 import GUI.initializer.InitializerFirmJScrollPane;
 import domain.Branch;
-import domain.Firm;
-import factory.InitializerJScrollPaneFactory;
 import service.BranchServiceImpl;
 import service.FirmServiceImpl;
 
@@ -15,32 +13,45 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
 
-import static java.lang.Integer.parseInt;
-
 public class FirmGuiApplication {
     private JPanel panel;
     private JTabbedPane tabbedPane1;
+    //-----------------------Firm--------------------
     private JList listFirm;
-    private JList listBranch;
-    private JList listEmployee;
-    private JButton buttonSearchFirm;
-    private JButton buttonCreateBranch;
-    private JButton buttonUpdateBranch;
-    private JButton buttonSearchBranch;
+    private JScrollPane firmJScrollPane;
     private JButton buttonCreateFirm;
-    private JButton buttonSearchEmployee;
-    private JButton buttonDeleteBranch;
+    private JButton buttonSearchFirm;
     private JButton buttonDeleteFirm;
-    private JButton buttonCreateEmployee;
-    private JButton buttonUpdateEmployee;
-    private JButton buttonDeleteEmployee;
     private JTextField textFirmName;
+    private JTextField textCountCountries;
+    private JTextField textCountBranches;
+    private JTextField textSumProfit;
+    private JTextField textCountEmployees;
+    private JTextField textSumWorth;
+    private JTextField textSumIncome;
+    private JTextField textSumOutcome;
+    //-----------------------Branch------------------
+    private JList listBranch;
+    private JScrollPane branchJScrollPane;
+    private JButton buttonCreateBranch;
+    private JButton buttonSearchBranch;
+    private JButton buttonUpdateBranch;
+    private JButton buttonDeleteBranch;
     private JTextField textBranchName;
     private JTextField textBranchAddress;
     private JTextField textBranchEstablishment;
     private JTextField textBranchWorth;
     private JTextField textBranchBudget;
     private JTextField textBranchFirm;
+    private JTextField textBranchCountry;
+    private JTextField textBranchCity;
+    //-----------------------Employee----------------
+    private JList listEmployee;
+    private JScrollPane employeeJScrollPane;
+    private JButton buttonSearchEmployee;
+    private JButton buttonCreateEmployee;
+    private JButton buttonUpdateEmployee;
+    private JButton buttonDeleteEmployee;
     private JTextField textEmployeeName;
     private JTextField textEmployeeSurname;
     private JTextField textEmployeeFatherName;
@@ -55,9 +66,13 @@ public class FirmGuiApplication {
     private JTextField textEmployeeAmka;
     private JTextField textEmployeeBranch;
     private JTextField textEmployeeFirm;
-    private JScrollPane firmJScrollPane;
-    private JScrollPane branchJScrollPane;
-    private JScrollPane employeeJScrollPane;
+    //--------------------Additional-----------------
+    //selectedFirm is the selected value from listFirm
+    private static String selectedFirm = "";
+    //selectedBranch is the selected value from listBranch
+    private static String selectedBranch = "";
+    private static String selectedCountry = "";
+    private static String selectedCity = "";
 
     public JScrollPane getFirmJScrollPane() {
         return firmJScrollPane;
@@ -275,53 +290,75 @@ public class FirmGuiApplication {
         this.textEmployeeFirm = textEmployeeFirm;
     }
 
+    public JTextField getTextBranchCountry() {
+        return textBranchCountry;
+    }
+
+    public void setTextBranchCountry(JTextField textBranchCountry) {
+        this.textBranchCountry = textBranchCountry;
+    }
+
+    public JTextField getTextBranchCity() {
+        return textBranchCity;
+    }
+
+    public void setTextBranchCity(JTextField textBranchCity) {
+        this.textBranchCity = textBranchCity;
+    }
+
     public FirmGuiApplication() {
-        initializeJSrollPane();
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()){
+                if ("Nimbus".equals(info.getName())){
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    SwingUtilities.updateComponentTreeUI(panel);
+                    break;
+                }
+            }
+        } catch (IllegalAccessException | InstantiationException | UnsupportedLookAndFeelException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        initializeFirmJScrollPane();
+        initializeBranchJScrollPane();
         buttonsFirmPage();
         buttonsBranchPage();
         activeMouseListener();
     }
 
-    private void activeMouseListener() {
+    private void initializeFirmJScrollPane(){
+        InitializerFirmJScrollPane jListFirm = new InitializerFirmJScrollPane(firmJScrollPane);
+        setListFirm(jListFirm.getjList());
+    }
 
+    private void initializeBranchJScrollPane(){
+        InitializerBranchJScrollPane jListBranch = new InitializerBranchJScrollPane(branchJScrollPane);
+        setListBranch(jListBranch.getjList());
+    }
+
+    private void activeMouseListener() {
         listFirm.addMouseListener(new MouseAdapter(){
             @Override
-            public void mouseClicked(MouseEvent e) {
-                String s = (String) listFirm.getSelectedValue();
-                System.out.println("Value Selected: " + s);
-
-                buttonDeleteFirm.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent actionEvent) {
-
-                        FirmServiceImpl firmService = new FirmServiceImpl();
-                        firmService.removeFirm(s);
-                        InitializerFirmJScrollPane jListFirm = new InitializerFirmJScrollPane(firmJScrollPane);
-                        setListFirm(jListFirm.getjList());
-                        activeMouseListener();
-                    }
-                });
+            public void mousePressed(MouseEvent e) {
+                selectedFirm = (String) listFirm.getSelectedValue();
+                System.out.println("Value Selected: " + selectedFirm);
+                getSelectedFirmInfo(selectedFirm);
             }
         });
 
         listBranch.addMouseListener(new MouseAdapter(){
             @Override
             public void mouseClicked(MouseEvent e) {
+                int index = 1;
                 String s = (String) listBranch.getSelectedValue();
-                System.out.println("Value Selected: " + s);
-                getSelectedInfo(s);
-
-                buttonDeleteBranch.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent actionEvent) {
-
-                        BranchServiceImpl branchService = new BranchServiceImpl();
-                        branchService.removeBranch(s);
-                        InitializerBranchJScrollPane jListBranch = new InitializerBranchJScrollPane(branchJScrollPane);
-                        setListBranch(jListBranch.getjList());
-                    }
-                });
-
+                index += listBranch.getSelectedIndex();
+                System.out.println("Value Selected: " + s + " and Index selected: " + index);
+                String[] arrOfStr = s.split("--", 3);
+                selectedBranch = arrOfStr[0];
+                selectedCountry = arrOfStr[1];
+                selectedCity = arrOfStr[2];
+                getSelectedBranchInfo(selectedBranch, selectedCountry, selectedCity);
+                System.out.println(selectedBranch + "  -- " + selectedCountry + " -- " + selectedCity);
             }
         });
 
@@ -332,38 +369,36 @@ public class FirmGuiApplication {
                 System.out.println("Value Selected: " + s);
             }
         });
-
     }
 
-    private void getSelectedInfo(String s){
+    private void getSelectedBranchInfo(String name, String country, String city){
         BranchServiceImpl branchService = new BranchServiceImpl();
-        Branch branch = branchService.findSelectedBranch(s);
+        Branch branch = branchService.findSelectedBranch(name, country, city);
         DefaultListModel model = new DefaultListModel();
-        JList jList = new JList(model);
+        new JList(model);
 
         textBranchName.setText(branch.getName());
         textBranchAddress.setText(branch.getAddress());
+        textBranchCountry.setText(branch.getCountry());
+        textBranchCity.setText(branch.getCity());
         textBranchEstablishment.setText(branch.getEstablishment());
-        textBranchWorth.setText(String.valueOf((long) branch.getWorth()));
-        textBranchBudget.setText(String.valueOf((long) branch.getBudget()));
+        textBranchWorth.setText(String.format("%,d",(long) branch.getWorth()) +"€");
+        textBranchBudget.setText(String.format("%,d",(long) branch.getBudget()) +"€");
         textBranchFirm.setText(String.valueOf(branch.getFirm()));
     }
 
-    private void initializeJSrollPane() {
+    private void getSelectedFirmInfo(String name){
+        FirmServiceImpl firmService = new FirmServiceImpl();
+        List<String> firm = firmService.findSelectedFirm(name);
+        DefaultListModel model = new DefaultListModel();
+        new JList(model);
 
-//        new InitializerJScrollPaneFactory("firm", firmJScrollPane);
-//
-//        new InitializerJScrollPaneFactory("branch", branchJScrollPane);
-
-        InitializerFirmJScrollPane jListFirm = new InitializerFirmJScrollPane(firmJScrollPane);
-        setListFirm(jListFirm.getjList());
-        InitializerBranchJScrollPane jListBranch = new InitializerBranchJScrollPane(branchJScrollPane);
-        setListBranch(jListBranch.getjList());
-
+        textCountBranches.setText(String.valueOf(firm.get(0)));
+        textSumWorth.setText(String.valueOf(firm.get(1)));
+        textCountCountries.setText(String.valueOf(firm.get(2)));
     }
 
     public void buttonsFirmPage(){
-
         buttonCreateFirm.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
@@ -371,74 +406,101 @@ public class FirmGuiApplication {
                 System.out.println(text);
                 FirmServiceImpl firmService = new FirmServiceImpl();
                 firmService.addFirm(text);
-                InitializerFirmJScrollPane jListFirm = new InitializerFirmJScrollPane(firmJScrollPane);
-                setListFirm(jListFirm.getjList());
+                initializeFirmJScrollPane();
                 activeMouseListener();
             }
         });
 
-
-
         buttonSearchFirm.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
+                String text = textFirmName.getText();
+                Boolean found = false;
+                int foundPosition = -1;
+                System.out.println(text);
+                for(int i = 0; i < listFirm.getModel().getSize(); i++)
+                {
+                    if(text.equals(listFirm.getModel().getElementAt(i))){
+                        found = true;
+                        foundPosition = i;
+                        break;
+                    }
+                }
+                if(found && foundPosition != -1 ){
+                    System.out.println("Found in position: " + ++foundPosition + " of " + listFirm.getModel().getSize());
+                    getSelectedFirmInfo(text);
+                }
+            }
+        });
 
-
+        buttonDeleteFirm.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                if(!selectedFirm.equals("")){
+                    switch (JOptionPane.showConfirmDialog(buttonDeleteFirm,
+                            "Do you want to delete this Firm?", "Delete a Firm",
+                            JOptionPane.YES_NO_OPTION)) {
+                        case JOptionPane.YES_OPTION:
+                            FirmServiceImpl firmService = new FirmServiceImpl();
+                            firmService.removeFirm(selectedFirm);
+                            initializeFirmJScrollPane();
+                            activeMouseListener();
+                            break;
+                        case JOptionPane.NO_OPTION:
+                            break;
+                        default:
+                            listFirm.clearSelection();
+                    }
+                }
             }
         });
     }
 
     public void buttonsBranchPage(){
-
         buttonCreateBranch.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
-                //i could add them as parameter in Branch;s constructor//
-                //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
-                Branch branch = new Branch();
-                branch.setName(textBranchName.getText());
-                branch.setAddress(textBranchAddress.getText());
-                branch.setEstablishment(textBranchEstablishment.getText());
-                branch.setWorth(Double.valueOf(textBranchWorth.getText()));
-                branch.setBudget(Double.valueOf(textBranchBudget.getText()));
-                branch.setFirm(Integer.parseInt(textBranchFirm.getText()));
 
-                branch.setListBranch();
-                List<Branch> branchList = branch.getListBranch();
-                branchList.add(branch);
-
-                System.out.println(branch.toString());
-                System.out.println(branchList.toString());
             }
         });
 
-
+        buttonDeleteBranch.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                System.out.println(selectedBranch + "  -- " + selectedCountry + " -- " + selectedCity);
+                if(!selectedBranch.equals("")) {
+                    switch (JOptionPane.showConfirmDialog(buttonDeleteFirm,
+                            "Do you want to delete this Branch?", "Delete a Firm",
+                            JOptionPane.YES_NO_OPTION)) {
+                        case JOptionPane.YES_OPTION:
+                            BranchServiceImpl branchService = new BranchServiceImpl();
+                            branchService.removeBranch(selectedBranch, selectedCountry, selectedCity);
+                            initializeBranchJScrollPane();
+                            activeMouseListener();
+                            break;
+                        case JOptionPane.NO_OPTION:
+                            break;
+                        default:
+                            listBranch.clearSelection();
+                    }
+                }
+            }
+        });
 
         buttonUpdateBranch.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                System.out.println(textBranchName.getText() + "\n"
-                        + textBranchAddress.getText()       + "\n"
-                        + textBranchEstablishment.getText() + "\n"
-                        + textBranchWorth.getText()         + "\n"
-                        + textBranchBudget.getText()        + "\n"
-                        + textBranchFirm.getText());
+
             }
         });
 
         buttonSearchBranch.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                System.out.println(textBranchName.getText() + "\n"
-                        + textBranchAddress.getText()       + "\n"
-                        + textBranchEstablishment.getText() + "\n"
-                        + textBranchWorth.getText()         + "\n"
-                        + textBranchBudget.getText()        + "\n"
-                        + textBranchFirm.getText());
+
+
             }
         });
+
     }
-
-
 }

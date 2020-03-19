@@ -1,6 +1,6 @@
 package GUI.Buttons;
 
-import models.Branch;
+import domain.Branch;
 
 import java.util.List;
 

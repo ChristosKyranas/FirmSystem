@@ -11,27 +11,29 @@ import java.util.HashMap;
 
 public class BranchServiceImpl implements BranchService {
 
+    private static final String RETURN_ALL_BRANCHES = "Select * from company.branch";
+    private static final String BRANCH_ID = "branch_id";
+    private static final String NAME = "name";
+    private static final String ADDRESS = "address";
+    private static final String CITY = "city";
+    private static final String COUNTRY = "country";
+    private static final String BUDGET = "budget";
+    private static final String WORTH = "worth";
+    private static final String ESTABLISHMENT = "establishment";
+    private static final String FIRM = "firm";
+    private DatabaseConnection databaseConnection = null;
+    private Connection conn = null;
+    private Statement statement = null;
+    private ResultSet rs = null;
+    private String query = "";
+
     public HashMap<Integer, Branch> findAllBranch(){
-        Connection conn = null;
-        Statement statement = null;
-        ResultSet rs = null;
         HashMap<Integer, Branch> branchHashMap = new HashMap<>();
-
         try {
-            DatabaseConnection databaseConnection = new DatabaseConnection();
-            conn = databaseConnection.getConnection();
-            statement = conn.createStatement();
-            rs = statement.executeQuery("Select * from company.branch");
+            statement = makeConnection().createStatement();
+            rs = statement.executeQuery(RETURN_ALL_BRANCHES);
             while(rs.next()){
-                Branch branch = new Branch();
-                branch.setName(rs.getString("name"));
-                branch.setAddress(rs.getString("address"));
-                branch.setBudget(Double.valueOf(rs.getString("budget")));
-                branch.setWorth(Double.valueOf(rs.getString("worth")));
-                branch.setEstablishment(rs.getString("establishment"));
-                branch.setFirm(Integer.valueOf(rs.getString("firm")));
-
-                branchHashMap.put(Integer.valueOf(rs.getString("branch_id")), branch);
+                branchHashMap.put(Integer.valueOf(rs.getString(BRANCH_ID)), getBranch());
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -40,26 +42,17 @@ public class BranchServiceImpl implements BranchService {
         return branchHashMap;
     }
 
-    public Branch findSelectedBranch(String selectedBranch){
-        Connection conn = null;
-        Statement statement = null;
-        ResultSet rs = null;
-        Branch branch = new Branch();
+    public Branch findSelectedBranch(String selectedBranch, String country, String city){
         try {
-            DatabaseConnection databaseConnection = new DatabaseConnection();
-            conn = databaseConnection.getConnection();
-            statement = conn.createStatement();
-            String query = "Select * from company.branch c where c.name = '"+ selectedBranch + "'";
-            //System.out.println(query);
-            rs = statement.executeQuery( query);
+            statement = makeConnection().createStatement();
+            query = "Select * " +
+                    "from company.branch c " +
+                    "where c.name = '"+ selectedBranch + "' " +
+                        "and c.country = '" + country + "' " +
+                        "and c.city = '" + city + "'";
+            rs = statement.executeQuery(query);
             while(rs.next()){
-                branch.setName(rs.getString("name"));
-                branch.setAddress(rs.getString("address"));
-                branch.setBudget(Double.valueOf(rs.getString("budget")));
-                branch.setWorth(Double.valueOf(rs.getString("worth")));
-                branch.setEstablishment(rs.getString("establishment"));
-                branch.setFirm(Integer.valueOf(rs.getString("firm")));
-                return branch;
+                return getBranch();
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -67,22 +60,35 @@ public class BranchServiceImpl implements BranchService {
         return null;
     }
 
-    public void removeBranch(String selectedBranch){
-        Connection conn = null;
-        Statement statement = null;
+    public void removeBranch(String selectedBranch, String country, String city){
         try {
-            DatabaseConnection databaseConnection = new DatabaseConnection();
-            conn = databaseConnection.getConnection();
-            statement = conn.createStatement();
-            String query = "delete  from company.branch where name = '"+ selectedBranch + "'";
-            //System.out.println(query);
+            statement = makeConnection().createStatement();
+            query =  "delete  " +
+                     "from company.branch " +
+                     "where name = '"+ selectedBranch + "' " +
+                            "and country = '" + country +"' " +
+                            "and city = '" + city + "'" ;
             statement.executeUpdate( query);
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
+    public Branch getBranch() throws SQLException {
+        Branch branch = new Branch();
+        branch.setName(rs.getString(NAME));
+        branch.setAddress(rs.getString(ADDRESS));
+        branch.setCity(rs.getString(CITY));
+        branch.setCountry(rs.getString(COUNTRY));
+        branch.setBudget(Double.valueOf(rs.getString(BUDGET)));
+        branch.setWorth(Double.valueOf(rs.getString(WORTH)));
+        branch.setEstablishment(rs.getString(ESTABLISHMENT));
+        branch.setFirm(Integer.valueOf(rs.getString(FIRM)));
+        return branch;
+    }
 
-
-
+    public Connection makeConnection(){
+        databaseConnection = new DatabaseConnection();
+        return databaseConnection.getConnection();
+    }
 }

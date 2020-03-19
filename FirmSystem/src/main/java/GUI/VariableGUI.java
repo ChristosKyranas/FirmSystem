@@ -1,0 +1,7 @@
+package GUI;
+
+class VariableGUI {
+
+
+
+}

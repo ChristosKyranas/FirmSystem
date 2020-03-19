@@ -6,4 +6,35 @@
 *diplay double with (long)
 *addMouseListener -> mouseClicked
 *addActionListener -> actionPerformed
-*MySQL gueries -> when we want to get back smt executeQuery otherwise executeUpdate
+*MySQL gueries -> when we want to get back smt executeQuery (select)
+    otherwise executeUpdate (insert, update , delete)
+*Set "Nimbus" as a default, we have to add:
+    try {
+        for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()){
+             if ("Nimbus".equals(info.getName())){
+                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                     SwingUtilities.updateComponentTreeUI(panel);
+                     break;
+             }
+         }
+    } catch (IllegalAccessException e) {
+            e.printStackTrace();
+    } catch (InstantiationException e) {
+            e.printStackTrace();
+    } catch (UnsupportedLookAndFeelException e) {
+            e.printStackTrace();
+    } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+    }
+*create popupmenu :
+    JPopupMenu popupMenu = new JPopupMenu();
+    JMenuItem deleteItem = new JMenuItem("delete");
+    deleteItem.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent actionEvent) {
+
+        }
+    });
+    popupMenu.add(deleteItem);
+    listFirm.setComponentPopupMenu(popupMenu);
+*String.format("%,d",(long) rs.getDouble("FirmWorth")) +"€" -> add dots 1.223.232€
