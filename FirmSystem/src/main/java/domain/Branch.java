@@ -10,6 +10,15 @@ public class Branch implements BranchDAO {
     private int branchId;
     private String name;
     private String address;
+    private String city;
+    private String country;
+    private double budget;
+    private double worth;
+    private String establishment;
+    private int firm;
+
+    private List<Branch> listBranch;
+
 
     public String getCity() {
         return city;
@@ -35,13 +44,6 @@ public class Branch implements BranchDAO {
         this.worth = worth;
     }
 
-    private String city;
-    private String country;
-    private double budget;
-    private double worth;
-    private String establishment;
-    private int firm;
-    private List<Branch> listBranch;
 
     public int getFirm() {
         return firm;

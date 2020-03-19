@@ -25,7 +25,10 @@ public class FirmGuiApplication {
     private JTextField textFirmName;
     private JTextField textCountCountries;
     private JTextField textCountBranches;
+    private JTextField textSelectedFirmName;
+
     private JTextField textSumProfit;
+
     private JTextField textCountEmployees;
     private JTextField textSumWorth;
     private JTextField textSumIncome;
@@ -66,6 +69,8 @@ public class FirmGuiApplication {
     private JTextField textEmployeeAmka;
     private JTextField textEmployeeBranch;
     private JTextField textEmployeeFirm;
+    private JScrollPane FormJScrollPane;
+    private JLabel Firm;
     //--------------------Additional-----------------
     //selectedFirm is the selected value from listFirm
     private static String selectedFirm = "";
@@ -74,36 +79,12 @@ public class FirmGuiApplication {
     private static String selectedCountry = "";
     private static String selectedCity = "";
 
-    public JScrollPane getFirmJScrollPane() {
-        return firmJScrollPane;
-    }
-
-    public void setFirmJScrollPane(JScrollPane firmJScrollPane) {
-        this.firmJScrollPane = firmJScrollPane;
-    }
-
     public JPanel getPanel() {
         return panel;
     }
 
     public void setPanel(JPanel panel) {
         this.panel = panel;
-    }
-
-    public JTabbedPane getTabbedPane1() {
-        return tabbedPane1;
-    }
-
-    public void setTabbedPane1(JTabbedPane tabbedPane1) {
-        this.tabbedPane1 = tabbedPane1;
-    }
-
-    public JTextField getTextFirmName() {
-        return textFirmName;
-    }
-
-    public void setTextFirmName(JTextField textFirmName) {
-        this.textFirmName = textFirmName;
     }
 
     public JList getListBranch() {
@@ -114,196 +95,12 @@ public class FirmGuiApplication {
         this.listBranch = listBranch;
     }
 
-    public JTextField getTextBranchName() {
-        return textBranchName;
-    }
-
-    public void setTextBranchName(JTextField textBranchName) {
-        this.textBranchName = textBranchName;
-    }
-
-    public JTextField getTextBranchAddress() {
-        return textBranchAddress;
-    }
-
-    public void setTextBranchAddress(JTextField textBranchAddress) {
-        this.textBranchAddress = textBranchAddress;
-    }
-
-    public JTextField getTextBranchEstablishment() {
-        return textBranchEstablishment;
-    }
-
-    public void setTextBranchEstablishment(JTextField textBranchEstablishment) {
-        this.textBranchEstablishment = textBranchEstablishment;
-    }
-
-    public JTextField getTextBranchWorth() {
-        return textBranchWorth;
-    }
-
-    public void setTextBranchWorth(JTextField textBranchWorth) {
-        this.textBranchWorth = textBranchWorth;
-    }
-
-    public JTextField getTextBranchBudget() {
-        return textBranchBudget;
-    }
-
-    public void setTextBranchBudget(JTextField textBranchBudget) {
-        this.textBranchBudget = textBranchBudget;
-    }
-
-    public JTextField getTextBranchFirm() {
-        return textBranchFirm;
-    }
-
-    public void setTextBranchFirm(JTextField textBranchFirm) {
-        this.textBranchFirm = textBranchFirm;
-    }
-
-    public JList getListEmployee() {
-        return listEmployee;
-    }
-
-    public void setListEmployee(JList listEmployee) {
-        this.listEmployee = listEmployee;
-    }
-
     public JList getListFirm() {
         return listFirm;
     }
 
     public void setListFirm(JList listFirm) {
         this.listFirm = listFirm;
-    }
-
-    public JTextField getTextEmployeeName() {
-        return textEmployeeName;
-    }
-
-    public void setTextEmployeeName(JTextField textEmployeeName) {
-        this.textEmployeeName = textEmployeeName;
-    }
-
-    public JTextField getTextEmployeeSurname() {
-        return textEmployeeSurname;
-    }
-
-    public void setTextEmployeeSurname(JTextField textEmployeeSurname) {
-        this.textEmployeeSurname = textEmployeeSurname;
-    }
-
-    public JTextField getTextEmployeeFatherName() {
-        return textEmployeeFatherName;
-    }
-
-    public void setTextEmployeeFatherName(JTextField textEmployeeFatherName) {
-        this.textEmployeeFatherName = textEmployeeFatherName;
-    }
-
-    public JTextField getTextEmployeeMotherName() {
-        return textEmployeeMotherName;
-    }
-
-    public void setTextEmployeeMotherName(JTextField textEmployeeMotherName) {
-        this.textEmployeeMotherName = textEmployeeMotherName;
-    }
-
-    public JTextField getTextEmployeeAddress() {
-        return textEmployeeAddress;
-    }
-
-    public void setTextEmployeeAddress(JTextField textEmployeeAddress) {
-        this.textEmployeeAddress = textEmployeeAddress;
-    }
-
-    public JTextField getTextEmployeeAge() {
-        return textEmployeeAge;
-    }
-
-    public void setTextEmployeeAge(JTextField textEmployeeAge) {
-        this.textEmployeeAge = textEmployeeAge;
-    }
-
-    public JTextField getTextEmployeeCity() {
-        return textEmployeeCity;
-    }
-
-    public void setTextEmployeeCity(JTextField textEmployeeCity) {
-        this.textEmployeeCity = textEmployeeCity;
-    }
-
-    public JTextField getTextEmployeeIdentity() {
-        return textEmployeeIdentity;
-    }
-
-    public void setTextEmployeeIdentity(JTextField textEmployeeIdentity) {
-        this.textEmployeeIdentity = textEmployeeIdentity;
-    }
-
-    public JTextField getTextEmployeeCountry() {
-        return textEmployeeCountry;
-    }
-
-    public void setTextEmployeeCountry(JTextField textEmployeeCountry) {
-        this.textEmployeeCountry = textEmployeeCountry;
-    }
-
-    public JTextField getTextEmployeePostCode() {
-        return textEmployeePostCode;
-    }
-
-    public void setTextEmployeePostCode(JTextField textEmployeePostCode) {
-        this.textEmployeePostCode = textEmployeePostCode;
-    }
-
-    public JTextField getTextEmployeeAfm() {
-        return textEmployeeAfm;
-    }
-
-    public void setTextEmployeeAfm(JTextField textEmployeeAfm) {
-        this.textEmployeeAfm = textEmployeeAfm;
-    }
-
-    public JTextField getTextEmployeeAmka() {
-        return textEmployeeAmka;
-    }
-
-    public void setTextEmployeeAmka(JTextField textEmployeeAmka) {
-        this.textEmployeeAmka = textEmployeeAmka;
-    }
-
-    public JTextField getTextEmployeeBranch() {
-        return textEmployeeBranch;
-    }
-
-    public void setTextEmployeeBranch(JTextField textEmployeeBranch) {
-        this.textEmployeeBranch = textEmployeeBranch;
-    }
-
-    public JTextField getTextEmployeeFirm() {
-        return textEmployeeFirm;
-    }
-
-    public void setTextEmployeeFirm(JTextField textEmployeeFirm) {
-        this.textEmployeeFirm = textEmployeeFirm;
-    }
-
-    public JTextField getTextBranchCountry() {
-        return textBranchCountry;
-    }
-
-    public void setTextBranchCountry(JTextField textBranchCountry) {
-        this.textBranchCountry = textBranchCountry;
-    }
-
-    public JTextField getTextBranchCity() {
-        return textBranchCity;
-    }
-
-    public void setTextBranchCity(JTextField textBranchCity) {
-        this.textBranchCity = textBranchCity;
     }
 
     public FirmGuiApplication() {
@@ -326,22 +123,22 @@ public class FirmGuiApplication {
         activeMouseListener();
     }
 
-    private void initializeFirmJScrollPane(){
+    public void initializeFirmJScrollPane(){
         InitializerFirmJScrollPane jListFirm = new InitializerFirmJScrollPane(firmJScrollPane);
         setListFirm(jListFirm.getjList());
     }
 
-    private void initializeBranchJScrollPane(){
+    public void initializeBranchJScrollPane(){
         InitializerBranchJScrollPane jListBranch = new InitializerBranchJScrollPane(branchJScrollPane);
         setListBranch(jListBranch.getjList());
     }
 
-    private void activeMouseListener() {
+    public void activeMouseListener() {
         listFirm.addMouseListener(new MouseAdapter(){
             @Override
             public void mousePressed(MouseEvent e) {
                 selectedFirm = (String) listFirm.getSelectedValue();
-                System.out.println("Value Selected: " + selectedFirm);
+                textSelectedFirmName.setText(" **** " + selectedFirm + " **** ");
                 getSelectedFirmInfo(selectedFirm);
             }
         });
@@ -349,10 +146,7 @@ public class FirmGuiApplication {
         listBranch.addMouseListener(new MouseAdapter(){
             @Override
             public void mouseClicked(MouseEvent e) {
-                int index = 1;
                 String s = (String) listBranch.getSelectedValue();
-                index += listBranch.getSelectedIndex();
-                System.out.println("Value Selected: " + s + " and Index selected: " + index);
                 String[] arrOfStr = s.split("--", 3);
                 selectedBranch = arrOfStr[0];
                 selectedCountry = arrOfStr[1];
@@ -371,7 +165,7 @@ public class FirmGuiApplication {
         });
     }
 
-    private void getSelectedBranchInfo(String name, String country, String city){
+    public void getSelectedBranchInfo(String name, String country, String city){
         BranchServiceImpl branchService = new BranchServiceImpl();
         Branch branch = branchService.findSelectedBranch(name, country, city);
         DefaultListModel model = new DefaultListModel();
@@ -387,7 +181,7 @@ public class FirmGuiApplication {
         textBranchFirm.setText(String.valueOf(branch.getFirm()));
     }
 
-    private void getSelectedFirmInfo(String name){
+    public void getSelectedFirmInfo(String name){
         FirmServiceImpl firmService = new FirmServiceImpl();
         List<String> firm = firmService.findSelectedFirm(name);
         DefaultListModel model = new DefaultListModel();
@@ -460,14 +254,27 @@ public class FirmGuiApplication {
         buttonCreateBranch.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
+                Branch branch = new Branch();
 
+                branch.setName(textBranchName.getText());
+                branch.setAddress(textBranchAddress.getText());
+                branch.setCity(textBranchCity.getText());
+                branch.setCountry(textBranchCountry.getText());
+                branch.setEstablishment(textBranchEstablishment.getText());
+                branch.setWorth(Double.parseDouble(textBranchWorth.getText()));
+                branch.setBudget(Double.parseDouble(textBranchBudget.getText()));
+
+                BranchServiceImpl branchService = new BranchServiceImpl();
+                branchService.addBranch(branch);
+
+                initializeBranchJScrollPane();
+                activeMouseListener();
             }
         });
 
         buttonDeleteBranch.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                System.out.println(selectedBranch + "  -- " + selectedCountry + " -- " + selectedCity);
                 if(!selectedBranch.equals("")) {
                     switch (JOptionPane.showConfirmDialog(buttonDeleteFirm,
                             "Do you want to delete this Branch?", "Delete a Firm",
@@ -490,6 +297,8 @@ public class FirmGuiApplication {
         buttonUpdateBranch.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
+
+
 
             }
         });

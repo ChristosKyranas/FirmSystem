@@ -42,6 +42,20 @@ public class BranchServiceImpl implements BranchService {
         return branchHashMap;
     }
 
+    public void addBranch(Branch branch){
+        try{
+            statement = makeConnection().createStatement();
+            //------------CHECK------------
+            //name - country - city
+            //if it exists -> reject it
+            //query = null
+            //otherwise -> add it
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+    }
+
+
     public Branch findSelectedBranch(String selectedBranch, String country, String city){
         try {
             statement = makeConnection().createStatement();
@@ -86,6 +100,7 @@ public class BranchServiceImpl implements BranchService {
         branch.setFirm(Integer.valueOf(rs.getString(FIRM)));
         return branch;
     }
+
 
     public Connection makeConnection(){
         databaseConnection = new DatabaseConnection();
