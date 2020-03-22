@@ -1,21 +1,18 @@
 package service;
 
-import domain.Branch;
+import domain.Employee;
 import utils.DatabaseConnection;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 
-public class BranchServiceImpl implements BranchService {
+public class EmployeeServiceImpl implements EmployeeService {
 
-    private static final String RETURN_ALL_BRANCHES = "Select * " +
-                                                      "from company.branch " +
-                                                      "order by name asc";
-    private static final String BRANCH_ID = "branch_id";
+    private static final String RETURN_ALL_EMPLOYEES = "Select * from company.employee";
+    /*private static final String BRANCH_ID = "branch_id";
     private static final String NAME = "name";
     private static final String ADDRESS = "address";
     private static final String CITY = "city";
@@ -24,32 +21,29 @@ public class BranchServiceImpl implements BranchService {
     private static final String WORTH = "worth";
     private static final String ESTABLISHMENT = "establishment";
     private static final String FIRM = "firm";
+    */
     private DatabaseConnection databaseConnection = null;
     private Connection conn = null;
     private Statement statement = null;
     private ResultSet rs = null;
     private String query = "";
-    /*HashMap<Integer, Branch>*/
 
-    public List<Branch> findAllBranch(){
-        //HashMap<Integer, Branch> branchHashMap = new HashMap<>();
-        List<Branch> orderedListBranch = new ArrayList<>();
+    public HashMap<Integer, Employee> findAllEmployee(){
+        HashMap<Integer, Employee> employeeHashMap = new HashMap<>();
         try {
             statement = makeConnection().createStatement();
-            rs = statement.executeQuery(RETURN_ALL_BRANCHES);
+            rs = statement.executeQuery(RETURN_ALL_EMPLOYEES);
             while(rs.next()){
-             //   branchHashMap.put(Integer.valueOf(rs.getString(BRANCH_ID)), getBranch());
-                orderedListBranch.add(getBranch());
+                employeeHashMap.put(Integer.valueOf(rs.getString("employee_id")), getEmployee());
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        //System.out.println("Branch: " + branchHashMap.toString());
-        //return branchHashMap;
-        return orderedListBranch;
+        System.out.println("Employee: " + employeeHashMap.toString());
+        return employeeHashMap;
     }
 
-    public void addBranch(Branch branch){
+    public void addEmployee(Employee employee){
         try{
             statement = makeConnection().createStatement();
             //------------CHECK------------
@@ -63,17 +57,17 @@ public class BranchServiceImpl implements BranchService {
     }
 
 
-    public Branch findSelectedBranch(String selectedBranch, String country, String city){
+    public Employee findSelectedEmployee(String selectedEmployee, String country, String city){
         try {
             statement = makeConnection().createStatement();
             query = "Select * " +
-                    "from company.branch c " +
-                    "where c.name = '"+ selectedBranch + "' " +
+                    "from company.employee c " +
+                    "where c.name = '"+ selectedEmployee + "' " +
                         "and c.country = '" + country + "' " +
                         "and c.city = '" + city + "'";
             rs = statement.executeQuery(query);
             while(rs.next()){
-                return getBranch();
+                return getEmployee();
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -95,17 +89,20 @@ public class BranchServiceImpl implements BranchService {
         }
     }
 
-    public Branch getBranch() throws SQLException {
-        Branch branch = new Branch();
-        branch.setName(rs.getString(NAME));
+    public Employee getEmployee() throws SQLException {
+        Employee employee = new Employee();
+
+
+        /*branch.setName(rs.getString(NAME));
         branch.setAddress(rs.getString(ADDRESS));
         branch.setCity(rs.getString(CITY));
         branch.setCountry(rs.getString(COUNTRY));
         branch.setBudget(Double.valueOf(rs.getString(BUDGET)));
         branch.setWorth(Double.valueOf(rs.getString(WORTH)));
         branch.setEstablishment(rs.getString(ESTABLISHMENT));
-        branch.setFirm(Integer.valueOf(rs.getString(FIRM)));
-        return branch;
+        branch.setFirm(Integer.valueOf(rs.getString(FIRM)));*/
+//        return employee;
+        return null;
     }
 
 

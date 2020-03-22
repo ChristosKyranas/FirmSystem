@@ -121,6 +121,7 @@ public class FirmGuiApplication {
         buttonsFirmPage();
         buttonsBranchPage();
         activeMouseListener();
+
     }
 
     public void initializeFirmJScrollPane(){
@@ -152,7 +153,6 @@ public class FirmGuiApplication {
                 selectedCountry = arrOfStr[1];
                 selectedCity = arrOfStr[2];
                 getSelectedBranchInfo(selectedBranch, selectedCountry, selectedCity);
-                System.out.println(selectedBranch + "  -- " + selectedCountry + " -- " + selectedCity);
             }
         });
 
@@ -231,9 +231,7 @@ public class FirmGuiApplication {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 if(!selectedFirm.equals("")){
-                    switch (JOptionPane.showConfirmDialog(buttonDeleteFirm,
-                            "Do you want to delete this Firm?", "Delete a Firm",
-                            JOptionPane.YES_NO_OPTION)) {
+                    switch (JOptionPane.showConfirmDialog(buttonDeleteFirm,"Do you want to delete this Firm?", "Delete a Firm", JOptionPane.YES_NO_OPTION)) {
                         case JOptionPane.YES_OPTION:
                             FirmServiceImpl firmService = new FirmServiceImpl();
                             firmService.removeFirm(selectedFirm);

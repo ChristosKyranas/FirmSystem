@@ -3,7 +3,7 @@ package GUI.initializer;
 import service.FirmServiceImpl;
 
 import javax.swing.*;
-import java.util.HashMap;
+import java.util.List;
 
 public class InitializerFirmJScrollPane {
 
@@ -18,7 +18,8 @@ public class InitializerFirmJScrollPane {
     private JList jList;
     private DefaultListModel model;
     private FirmServiceImpl firmService;
-    private HashMap<Integer, String> firm;
+    //private HashMap<Integer, String> firm;
+    private List<String> firm;
 
     public InitializerFirmJScrollPane(JScrollPane jScrollPane) {
 
@@ -27,10 +28,13 @@ public class InitializerFirmJScrollPane {
         model = new DefaultListModel();
         jList = new JList(model);
 
-        for ( int i : firm.keySet() ){
+        /*for ( int i : firm.keySet() ){
             model.addElement(firm.get(i));
         }
-
+*/
+        for (String e : firm){
+            model.addElement(e);
+        }
         jScrollPane.setViewportView(jList);
     }
 

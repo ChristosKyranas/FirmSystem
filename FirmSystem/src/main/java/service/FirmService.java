@@ -1,12 +1,11 @@
 package service;
 
 import java.sql.Connection;
-import java.util.HashMap;
 import java.util.List;
 
 public interface FirmService {
 
-    HashMap<Integer, String> findAllFirm();
+    List<String> findAllFirm();
 
     void addFirm(String firmName);
 

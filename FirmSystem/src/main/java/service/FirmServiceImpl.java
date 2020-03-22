@@ -7,13 +7,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class FirmServiceImpl implements FirmService {
 
-    private static final String ALL_FIRMS = "Select * from company.firm";
-    private static final String ALL_BRANCHES = "Select * from company.branch";
+    private static final String ALL_FIRMS = "Select * " +
+                                            "from company.firm " +
+                                            "order by name asc";
     private static final String FIRM_ID = "firm_id";
     private static final String NAME = "name";
 
@@ -23,19 +23,25 @@ public class FirmServiceImpl implements FirmService {
     private ResultSet rs = null;
     private String query = "";
 
-    public HashMap<Integer, String> findAllFirm(){
-        HashMap<Integer, String> firmHashMap = new HashMap<>();
+    /*HashMap<Integer, String>*/
+    public List<String> findAllFirm(){
+        //HashMap<Integer, String> firmHashMap = new HashMap<>();
+        List<String> orderedListFirm = new ArrayList<>();
         try {
             statement = makeConnection().createStatement();
             rs = statement.executeQuery(ALL_FIRMS);
             while(rs.next()){
-                firmHashMap.put(Integer.valueOf(rs.getString(FIRM_ID)), rs.getString(NAME));
+                //firmHashMap.put(Integer.valueOf(rs.getString(FIRM_ID)), rs.getString(NAME));
+                //System.out.println("Firms: " + firmHashMap.toString());
+                orderedListFirm.add(rs.getString(NAME));
+
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        System.out.println("Firms: " + firmHashMap.toString());
-        return firmHashMap;
+        //System.out.println("Firms: " + firmHashMap.toString());
+        //return firmHashMap;
+        return orderedListFirm;
     }
 
     public void addFirm(String firmName){
