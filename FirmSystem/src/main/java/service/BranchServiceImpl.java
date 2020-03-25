@@ -81,6 +81,22 @@ public class BranchServiceImpl implements BranchService {
         return null;
     }
 
+    public Branch findSelectedBranch(int selectedBranch){
+        try {
+            statement = makeConnection().createStatement();
+            query = "Select * " +
+                    "from company.branch c " +
+                    "where c.branch_id = "+ selectedBranch ;
+            rs = statement.executeQuery(query);
+            while(rs.next()){
+                return getBranch();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public void removeBranch(String selectedBranch, String country, String city){
         try {
             statement = makeConnection().createStatement();

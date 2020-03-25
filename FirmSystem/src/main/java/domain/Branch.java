@@ -1,11 +1,10 @@
 package domain;
 
-import DataAccessObject.BranchDAO;
 
-import java.util.ArrayList;
+
 import java.util.List;
 
-public class Branch implements BranchDAO {
+public class Branch {
 
     private int branchId;
     private String name;
@@ -116,28 +115,5 @@ public class Branch implements BranchDAO {
                 '}';
     }
 
-    @Override
-    public List<Branch> getListBranch() {
-        return listBranch;
-    }
 
-    @Override
-    public void setListBranch(){
-        listBranch = new ArrayList<>();
-    }
-
-    @Override
-    public void addListBranch(Branch e){
-        listBranch.add(e);
-    }
-
-    @Override
-    public void removeListBranch(Branch e){
-        listBranch.remove(e);
-    }
-
-    @Override
-    public void updateListBranch(Branch e) {
-        //update here
-    }
 }

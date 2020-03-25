@@ -1,11 +1,29 @@
 package domain;
 
-public class Job {
-
+public class Job extends Employee{
+    //variables checked "OK"
     private int jobId;
-    private int vacancies;
     private String jobTitle;
+    private int salary;
+    private int vacancies;
     private String hiringDate;
+    private int employee;
+
+    public int getSalary() {
+        return salary;
+    }
+
+    public void setSalary(int salary) {
+        this.salary = salary;
+    }
+
+    public int getEmployee() {
+        return employee;
+    }
+
+    public void setEmployee(int employee) {
+        this.employee = employee;
+    }
 
     public int getJobId() {
         return jobId;

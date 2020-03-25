@@ -1,12 +1,12 @@
 package domain;
 
 public class Salary {
-
+    //variables checked "OK"
     private int salaryId;
     private int payment;
-    private int employee;
-    private double overtime;
     private String paymentDate;
+    private double overtime;
+    private int employee;
 
     public int getSalaryId() {
         return salaryId;

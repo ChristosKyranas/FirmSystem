@@ -1,10 +1,14 @@
 package GUI;
 
 import GUI.initializer.InitializerBranchJScrollPane;
+import GUI.initializer.InitializerEmployeeJScrollPane;
 import GUI.initializer.InitializerFirmJScrollPane;
 import domain.Branch;
+import domain.PersonalInfo;
 import service.BranchServiceImpl;
+import service.EmployeeServiceImpl;
 import service.FirmServiceImpl;
+import service.PersonalInfoServiceImpl;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -48,8 +52,11 @@ public class FirmGuiApplication {
     private JTextField textBranchFirm;
     private JTextField textBranchCountry;
     private JTextField textBranchCity;
+
+
     //-----------------------Employee----------------
     private JList listEmployee;
+
     private JScrollPane employeeJScrollPane;
     private JButton buttonSearchEmployee;
     private JButton buttonCreateEmployee;
@@ -75,9 +82,14 @@ public class FirmGuiApplication {
     //selectedFirm is the selected value from listFirm
     private static String selectedFirm = "";
     //selectedBranch is the selected value from listBranch
-    private static String selectedBranch = "";
-    private static String selectedCountry = "";
-    private static String selectedCity = "";
+    private static String selectedBranchName = "";
+    private static String selectedBranchCountry = "";
+    private static String selectedBranchCity = "";
+    //selectedEmployee is the selected value from listEmployee
+    private static String selectedEmployeeName = "";
+    private static String selectedEmployeeSurName = "";
+    private static String selectedEmployeeFatherName = "";
+    private static String selectedEmployeeBranch = "";
 
     public JPanel getPanel() {
         return panel;
@@ -103,6 +115,14 @@ public class FirmGuiApplication {
         this.listFirm = listFirm;
     }
 
+    public JList getListEmployee() {
+        return listEmployee;
+    }
+
+    public void setListEmployee(JList listEmployee) {
+        this.listEmployee = listEmployee;
+    }
+
     public FirmGuiApplication() {
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()){
@@ -118,6 +138,7 @@ public class FirmGuiApplication {
 
         initializeFirmJScrollPane();
         initializeBranchJScrollPane();
+        initializeEmployeeJScrollPane();
         buttonsFirmPage();
         buttonsBranchPage();
         activeMouseListener();
@@ -132,6 +153,11 @@ public class FirmGuiApplication {
     public void initializeBranchJScrollPane(){
         InitializerBranchJScrollPane jListBranch = new InitializerBranchJScrollPane(branchJScrollPane);
         setListBranch(jListBranch.getjList());
+    }
+
+    public void initializeEmployeeJScrollPane(){
+        InitializerEmployeeJScrollPane jListBranch = new InitializerEmployeeJScrollPane(employeeJScrollPane);
+        setListEmployee(jListBranch.getjList());
     }
 
     public void activeMouseListener() {
@@ -149,10 +175,10 @@ public class FirmGuiApplication {
             public void mouseClicked(MouseEvent e) {
                 String s = (String) listBranch.getSelectedValue();
                 String[] arrOfStr = s.split("--", 3);
-                selectedBranch = arrOfStr[0];
-                selectedCountry = arrOfStr[1];
-                selectedCity = arrOfStr[2];
-                getSelectedBranchInfo(selectedBranch, selectedCountry, selectedCity);
+                selectedBranchName = arrOfStr[0];
+                selectedBranchCountry = arrOfStr[1];
+                selectedBranchCity = arrOfStr[2];
+                getSelectedBranchInfo(selectedBranchName, selectedBranchCountry, selectedBranchCity);
             }
         });
 
@@ -160,9 +186,43 @@ public class FirmGuiApplication {
             @Override
             public void mouseClicked(MouseEvent e) {
                 String s = (String) listEmployee.getSelectedValue();
-                System.out.println("Value Selected: " + s);
+                String[] arrOfStr = s.split("--", 4);
+                selectedEmployeeName = arrOfStr[0];
+                selectedEmployeeSurName = arrOfStr[1];
+                selectedEmployeeFatherName = arrOfStr[2];
+                selectedEmployeeBranch = arrOfStr[3];
+                getSelectedEmployeeInfo();
             }
         });
+    }
+
+    public void getSelectedEmployeeInfo(){
+        EmployeeServiceImpl employeeService = new EmployeeServiceImpl();
+        int id = 0;
+        id = employeeService.findSelectedEmployee(selectedEmployeeName,
+                selectedEmployeeSurName,
+                selectedEmployeeFatherName,
+                selectedEmployeeBranch);
+
+        PersonalInfoServiceImpl personalInfoService = new PersonalInfoServiceImpl();
+        PersonalInfo personalInfo = personalInfoService.findSelectedPersonalInfo(id);
+
+        DefaultListModel model = new DefaultListModel();
+        new JList(model);
+
+        textEmployeeName.setText(personalInfo.getName());
+        textEmployeeSurname.setText(personalInfo.getSurName());
+        textEmployeeFatherName.setText(personalInfo.getFatherName());
+        textEmployeeMotherName.setText(personalInfo.getMotherName());
+        textEmployeeIdentity.setText(personalInfo.getId());
+        textEmployeeAfm.setText(String.valueOf(personalInfo.getAfm()));
+        textEmployeeAmka.setText(String.valueOf(personalInfo.getAmka()));
+        textEmployeeAddress.setText(personalInfo.getAddress());
+        textEmployeeAge.setText(String.valueOf(personalInfo.getAge()));
+        textEmployeeCity.setText(personalInfo.getCity());
+        textEmployeeCountry.setText(personalInfo.getCountry());
+        textEmployeePostCode.setText(String.valueOf(personalInfo.getPostCode()));
+
     }
 
     public void getSelectedBranchInfo(String name, String country, String city){
@@ -273,13 +333,13 @@ public class FirmGuiApplication {
         buttonDeleteBranch.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                if(!selectedBranch.equals("")) {
+                if(!selectedBranchName.equals("")) {
                     switch (JOptionPane.showConfirmDialog(buttonDeleteFirm,
                             "Do you want to delete this Branch?", "Delete a Firm",
                             JOptionPane.YES_NO_OPTION)) {
                         case JOptionPane.YES_OPTION:
                             BranchServiceImpl branchService = new BranchServiceImpl();
-                            branchService.removeBranch(selectedBranch, selectedCountry, selectedCity);
+                            branchService.removeBranch(selectedBranchName, selectedBranchCountry, selectedBranchCity);
                             initializeBranchJScrollPane();
                             activeMouseListener();
                             break;

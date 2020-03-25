@@ -24,10 +24,8 @@ public class InitializerBranchJScrollPane {
             model.addElement(branch.get(i).getName() + "--" + branch.get(i).getCountry() + "--" + branch.get(i).getCity());
 
         }*/
-        int i = 0;
         for (Branch e : branch){
-            model.addElement(branch.get(i).getName() + "--" + branch.get(i).getCountry() + "--" + branch.get(i).getCity());
-            i++;
+            model.addElement(e.getName() + "--" + e.getCountry() + "--" + e.getCity());
         }
         jScrollPane.setViewportView(jList);
     }

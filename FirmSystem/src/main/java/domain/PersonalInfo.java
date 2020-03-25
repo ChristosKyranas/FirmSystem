@@ -1,19 +1,21 @@
 package domain;
 
 public class PersonalInfo {
-
+    //variables checked "OK"
+    private int personalInfoId;
     private String name;
     private String surName;
     private String fatherName;
     private String motherName;
-    private String address;
     private String id; //identity-passport
-    private String city;
-    private String country;
     private int afm ;
     private int amka;
+    private String address;
     private int age;
+    private String city;
+    private String country;
     private int postCode;
+    private int employee;
 
     public String getName() {
         return name;
@@ -111,21 +113,39 @@ public class PersonalInfo {
         this.postCode = postCode;
     }
 
+    public int getPersonalInfoId() {
+        return personalInfoId;
+    }
+
+    public void setPersonalInfoId(int personalInfoId) {
+        this.personalInfoId = personalInfoId;
+    }
+
+    public int getEmployee() {
+        return employee;
+    }
+
+    public void setEmployee(int employee) {
+        this.employee = employee;
+    }
+
     @Override
     public String toString() {
         return "PersonalInfo{" +
-                "name='" + name + '\'' +
+                "personalInfoId=" + personalInfoId +
+                ", name='" + name + '\'' +
                 ", surName='" + surName + '\'' +
                 ", fatherName='" + fatherName + '\'' +
                 ", motherName='" + motherName + '\'' +
-                ", address='" + address + '\'' +
                 ", id='" + id + '\'' +
-                ", city='" + city + '\'' +
-                ", country='" + country + '\'' +
                 ", afm=" + afm +
                 ", amka=" + amka +
+                ", address='" + address + '\'' +
                 ", age=" + age +
+                ", city='" + city + '\'' +
+                ", country='" + country + '\'' +
                 ", postCode=" + postCode +
+                ", employee=" + employee +
                 '}';
     }
 }

@@ -1,11 +1,29 @@
 package domain;
 
 public class Education {
-
+    //variables checked "OK"
+    private int educationId;
     private String bachelor;
     private String master;
     private String phD;
     private int certificate;
+    private int employee;
+
+    public int getEducationId() {
+        return educationId;
+    }
+
+    public void setEducationId(int educationId) {
+        this.educationId = educationId;
+    }
+
+    public int getEmployee() {
+        return employee;
+    }
+
+    public void setEmployee(int employee) {
+        this.employee = employee;
+    }
 
     public String getBachelor() {
         return bachelor;
