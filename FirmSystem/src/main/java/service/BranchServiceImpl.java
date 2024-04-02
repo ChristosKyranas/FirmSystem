@@ -10,6 +10,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.mysql.cj.util.StringUtils.isNullOrEmpty;
+
 public class BranchServiceImpl implements BranchService {
 
     private static final String RETURN_ALL_BRANCHES = "Select * " +
@@ -53,11 +55,47 @@ public class BranchServiceImpl implements BranchService {
         try{
             statement = makeConnection().createStatement();
             //------------CHECK------------
+//            if(branch.getName()!=null && branch.getAddress()!=null && branch.getCity()!=null && branch.getCountry()!=null && branch.getEstablishment()!=null ){
+            System.out.println("test");
+            System.out.println(branch.getName());
+            query = "select * " +
+                    "from company.branch where name='"+ branch.getName()+"'";
+            System.out.println(query);
+            rs = statement.executeQuery(query);
+//                    "select * " +
+//                    "from company.branch" +
+////                    "where name = '"+ branch.getName()+
+//                    "where name = 't' ");
+//                    "' and address = '"+ branch.getAddress()+
+//                    "' and city = '"+ branch.getCity()+
+//                    "' and country = '"+ branch.getCountry()+
+//                        "' and establishment = '"+ branch.getEstablishment()+
+            System.out.println(rs.next());
+//            if(!(isNullOrEmpty(branch.getName()) || isNullOrEmpty(branch.getAddress()) || isNullOrEmpty(branch.getCity()) || isNullOrEmpty(branch.getCountry()) || isNullOrEmpty(branch.getEstablishment())) ){
+//
+//                if (rs==null){
+//                    System.out.println("test2");
+//                }
+//            }
+//            query = "insert into company.firm (name) values ('" + firmName + "');";
+
+            // if not exists insert
+            if(!rs.next()){
+                query = "INSERT INTO company.branch ( name, address, city, country, establishment, budget, worth, firm ) " +
+                        "VALUES ('"+ branch.getName()+"','"+ branch.getAddress()+"','"+ branch.getCity()+"','"+ branch.getCountry()+"','"+ branch.getEstablishment()+"','"+ branch.getBudget()+"','"+ branch.getWorth()+"',"+ branch.getFirm()+");";
+                System.out.println(query);
+                statement.executeUpdate(query);
+            }
             //name - country - city
             //if it exists -> reject it
             //query = null
             //otherwise -> add it
         }catch (SQLException e){
+            System.out.println("Error Code: " + e.getErrorCode());
+            System.out.println("SQL State: " + e.getSQLState());
+            System.out.println("Message: " + e.getMessage());
+            System.out.println("Message: " + e.getMessage());
+            System.out.println("Print Trace: /n");
             e.printStackTrace();
         }
     }
@@ -76,6 +114,11 @@ public class BranchServiceImpl implements BranchService {
                 return getBranch();
             }
         } catch (SQLException e) {
+            System.out.println("Error Code: " + e.getErrorCode());
+            System.out.println("SQL State: " + e.getSQLState());
+            System.out.println("Message: " + e.getMessage());
+            System.out.println("Message: " + e.getMessage());
+            System.out.println("Print Trace: /n");
             e.printStackTrace();
         }
         return null;
@@ -92,6 +135,11 @@ public class BranchServiceImpl implements BranchService {
                 return getBranch();
             }
         } catch (SQLException e) {
+            System.out.println("Error Code: " + e.getErrorCode());
+            System.out.println("SQL State: " + e.getSQLState());
+            System.out.println("Message: " + e.getMessage());
+            System.out.println("Message: " + e.getMessage());
+            System.out.println("Print Trace: /n");
             e.printStackTrace();
         }
         return null;
@@ -105,8 +153,14 @@ public class BranchServiceImpl implements BranchService {
                      "where name = '"+ selectedBranch + "' " +
                             "and country = '" + country +"' " +
                             "and city = '" + city + "'" ;
-            statement.executeUpdate( query);
+            System.out.println(query);
+            statement.executeUpdate(query);
         } catch (SQLException e) {
+            System.out.println("Error Code: " + e.getErrorCode());
+            System.out.println("SQL State: " + e.getSQLState());
+            System.out.println("Message: " + e.getMessage());
+            System.out.println("Message: " + e.getMessage());
+            System.out.println("Print Trace: /n");
             e.printStackTrace();
         }
     }
