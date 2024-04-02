@@ -321,6 +321,8 @@ public class FirmGuiApplication {
                 branch.setEstablishment(textBranchEstablishment.getText());
                 branch.setWorth(Double.parseDouble(textBranchWorth.getText()));
                 branch.setBudget(Double.parseDouble(textBranchBudget.getText()));
+                //return firm_id depend on name
+                branch.setFirm(Integer.parseInt(textBranchFirm.getText()));
 
                 BranchServiceImpl branchService = new BranchServiceImpl();
                 branchService.addBranch(branch);
