@@ -49,12 +49,10 @@ public class FirmServiceImpl implements FirmService {
         try {
             statement = makeConnection().createStatement();
             rs = statement.executeQuery("select max(firm_id) as id " +
-                                           "from company.firm;");
-            while(rs.next()){
-                id += Integer.valueOf(rs.getString("id"));
-            }
+                                            "from company.firm;");
+            System.out.println(rs);
             System.out.println(id);
-            query = "insert into company.firm (firm_id, name) values (" + id + ",'" + firmName + "');";
+            query = "insert into company.firm (name) values ('" + firmName + "');";
             statement.executeUpdate(query);
         } catch (SQLException e) {
             e.printStackTrace();
