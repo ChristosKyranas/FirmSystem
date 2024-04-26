@@ -175,7 +175,7 @@ public class FirmGuiApplication {
             public void mousePressed(MouseEvent e) {
                 selectedFirm = (String) listFirm.getSelectedValue();
                 textSelectedFirmName.setText(" **** " + selectedFirm + " **** ");
-                getSelectedFirmInfo(selectedFirm);
+                getFirmInfo(selectedFirm);
             }
         });
 
@@ -187,7 +187,7 @@ public class FirmGuiApplication {
                 selectedBranchName = arrOfStr[0];
                 selectedBranchCountry = arrOfStr[1];
                 selectedBranchCity = arrOfStr[2];
-                getSelectedBranchInfo(selectedBranchName, selectedBranchCountry, selectedBranchCity);
+                getBranchInfo(selectedBranchName, selectedBranchCountry, selectedBranchCity);
             }
         });
 
@@ -200,12 +200,12 @@ public class FirmGuiApplication {
                 selectedEmployeeSurName = arrOfStr[1];
                 selectedEmployeeFatherName = arrOfStr[2];
                 selectedEmployeeBranch = arrOfStr[3];
-                getSelectedEmployeeInfo();
+                getEmployeeInfo();
             }
         });
     }
 
-    public void getSelectedEmployeeInfo(){
+    public void getEmployeeInfo(){
         EmployeeServiceImpl employeeService = new EmployeeServiceImpl();
         int id = 0;
         id = employeeService.findSelectedEmployee(selectedEmployeeName,
@@ -234,7 +234,7 @@ public class FirmGuiApplication {
 
     }
 
-    public void getSelectedBranchInfo(String name, String country, String city){
+    public void getBranchInfo(String name, String country, String city){
         BranchServiceImpl branchService = new BranchServiceImpl();
         Branch branch = branchService.getSelectedBranch(name, country, city);
         DefaultListModel model = new DefaultListModel();
@@ -250,9 +250,9 @@ public class FirmGuiApplication {
         textBranchFirm.setText(String.valueOf(branch.getFirm()));
     }
 
-    public void getSelectedFirmInfo(String name){
+    public void getFirmInfo(String name){
         FirmServiceImpl firmService = new FirmServiceImpl();
-        List<String> firm = firmService.findSelectedFirm(name);
+        List<String> firm = firmService.getFirm(name);
         DefaultListModel model = new DefaultListModel();
         new JList(model);
 
@@ -294,7 +294,7 @@ public class FirmGuiApplication {
                 }
                 if(found && foundPosition != -1 ){
                     System.out.println("Found in position: " + ++foundPosition + " of " + listFirm.getModel().getSize());
-                    getSelectedFirmInfo(text);
+                    getFirmInfo(text);
                 }
             }
         });
@@ -308,6 +308,12 @@ public class FirmGuiApplication {
                             FirmServiceImpl firmService = new FirmServiceImpl();
                             firmService.removeFirm(selectedFirm);
                             initializeFirmJScrollPane();
+                            // when I delete a firm, delete on cascade its branches
+                            // so refresh branch list
+                            initializeBranchJScrollPane();
+                            // when I delete a firm, delete on cascade its branches & employees
+                            // so refresh employee list
+                            initializeEmployeeJScrollPane();
                             activeMouseListener();
                             break;
                         case JOptionPane.NO_OPTION:
