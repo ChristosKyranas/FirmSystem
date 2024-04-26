@@ -1,7 +1,7 @@
 package service;
 
 import domain.Employee;
-import utils.DatabaseConnection;
+import factory.DatabaseConnectionFactory;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -12,22 +12,27 @@ import java.util.List;
 
 public class EmployeeServiceImpl implements EmployeeService {
 
-    private static final String RETURN_ALL_EMPLOYEES = "Select * from company.employee";
-
-    private DatabaseConnection databaseConnection = null;
-    private Connection conn = null;
-    private Statement statement = null;
-    private ResultSet rs = null;
-    private String query = "";
+//    private static final String RETURN_ALL_EMPLOYEES = "Select * from company.employee";
+//
+//    private DatabaseConnection databaseConnection = null;
+//    private Connection conn = null;
+//    private Statement statement = null;
+//    private ResultSet rs = null;
+//    private String query = "";
 
     public List<Employee> findAllEmployee(){
         List<Employee> orderedEmployeeList = new ArrayList<>();
         try {
-            statement = makeConnection().createStatement();
-            rs = statement.executeQuery(RETURN_ALL_EMPLOYEES);
-            while(rs.next()){
-                orderedEmployeeList.add(getEmployee());
-            }
+            Statement statement = makeConnection().createStatement();
+//            ResultSet rs = statement.executeQuery("Select * from company.employee");
+            ResultSet rs = null;
+//            while(rs.next()){
+//                orderedEmployeeList.add(getEmployee());
+//            }
+
+            // close connection
+            statement.close();
+            makeConnection().close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -36,16 +41,16 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     public Employee getEmployee() throws SQLException {
         Employee employee = new Employee();
-        employee.setEmployeeId(Integer.valueOf(rs.getString("employee_id")));
-        employee.setBranch(Integer.valueOf(rs.getString("branch")));
+//        employee.setEmployeeId(Integer.valueOf(rs.getString("employee_id")));
+//        employee.setBranch(Integer.valueOf(rs.getString("branch")));
 
         return employee;
     }
 
     public int findSelectedEmployee(String selectedEmployee, String surName, String fatherName, String branch){
         try {
-            statement = makeConnection().createStatement();
-            query = "Select employee_id " +
+            Statement statement = makeConnection().createStatement();
+            String query = "Select employee_id " +
                     "from company.employee e , company.personal_info c, company.branch b " +
                     "where c.name = '"+ selectedEmployee + "' " +
                         "and c.surname = '" + surName + "' " +
@@ -53,11 +58,15 @@ public class EmployeeServiceImpl implements EmployeeService {
                         "and c.employee = e.employee_id " +
                         "and b.branch_id = e.branch " +
                         "and b.name = '" + branch + "' ";
-            rs = statement.executeQuery(query);
+            ResultSet rs = statement.executeQuery(query);
             while(rs.next()){
                 int id = Integer.parseInt(rs.getString("employee_id"));
                 return id;
             }
+
+            // close connection
+            statement.close();
+            makeConnection().close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -75,6 +84,10 @@ public class EmployeeServiceImpl implements EmployeeService {
                             "and country = '" + country +"' " +
                             "and city = '" + city + "'" ;
             statement.executeUpdate( query);
+
+            // close connection
+            statement.close();
+            makeConnection().close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -91,6 +104,10 @@ public class EmployeeServiceImpl implements EmployeeService {
             //if it exists -> reject it
             //query = null
             //otherwise -> add it
+
+            // close connection
+            statement.close();
+            makeConnection().close();
         }catch (SQLException e){
             e.printStackTrace();
         }
@@ -98,7 +115,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 */
 
     public Connection makeConnection(){
-        databaseConnection = new DatabaseConnection();
-        return databaseConnection.getConnection();
+        DatabaseConnectionFactory databaseConnectionFactory = new DatabaseConnectionFactory();
+        return databaseConnectionFactory.getConnection();
     }
 }

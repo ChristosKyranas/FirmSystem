@@ -1,13 +1,20 @@
 package GUI.Dialogs;
 
-import GUI.FirmGuiApplication;
 import domain.User;
-import utils.DatabaseConnection;
+import factory.DatabaseConnectionFactory;
 
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.PBEKeySpec;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.security.spec.InvalidKeySpecException;
 import java.sql.*;
 
 public class LoginForm extends JDialog {
@@ -16,11 +23,6 @@ public class LoginForm extends JDialog {
     private JButton buttonOK;
     private JButton buttonCancel;
     private JPanel loginPanel;
-    private DatabaseConnection databaseConnection = null;
-    private Statement statement = null;
-    private PreparedStatement preparedStatement = null;
-    private ResultSet rs = null;
-    private String sql = null;
     public User user;
     public LoginForm(JFrame parent){
         super(parent);
@@ -37,11 +39,15 @@ public class LoginForm extends JDialog {
                 String email = textFieldEmail.getText();
                 String password = String.valueOf(passwordFieldLogin.getPassword());
 
+                // check user's login credentials
+                // if exists returns object user
                 user = getAuthenticateUser(email, password);
 
                 if(user!=null){
+                    // release resources
                     dispose();
                 }else {
+                    // display error message to user
                     JOptionPane.showMessageDialog(LoginForm.this,
                             "Email or Password Invalid",
                             "Try Again",
@@ -49,9 +55,11 @@ public class LoginForm extends JDialog {
                 }
             }
         });
+
         buttonCancel.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                // release resources
                 dispose();
             }
         });
@@ -62,14 +70,26 @@ public class LoginForm extends JDialog {
     private User getAuthenticateUser(String email, String password) {
         User user = null;
 
-        try{
-            statement = makeConnection().createStatement();
-            sql = "SELECT * FROM users WHERE email=? AND password=?";
-            preparedStatement = makeConnection().prepareStatement(sql);
-            preparedStatement.setString(1, email);
-            preparedStatement.setString(2, password);
+        // run test hashed code
+        try {
+            test(password);
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        } catch (InvalidKeySpecException e) {
+            throw new RuntimeException(e);
+        }
 
-            rs = preparedStatement.executeQuery();
+        try{
+            // make connection with database
+            Statement statement = makeConnection().createStatement();
+            String query = "SELECT * FROM users WHERE email=? AND password_hashed=?";
+//            String query = "SELECT * FROM users WHERE email=? AND password=?";
+            PreparedStatement preparedStatement = makeConnection().prepareStatement(query);
+            preparedStatement.setString(1, email);
+            preparedStatement.setString(2, getHashedPassword(password));
+//            preparedStatement.setString(2, password);
+
+            ResultSet rs = preparedStatement.executeQuery();
 
             if (rs.next()){
                 user = new User();
@@ -77,12 +97,13 @@ public class LoginForm extends JDialog {
                 user.email = rs.getString("email");
                 user.phone = rs.getString("phone");
                 user.address = rs.getString("address");
-                user.password = rs.getString("password");
+                // exposed password
+//                user.password = rs.getString("password");
             }
 
-            closeConnection();
-//            statement.close();
-//            makeConnection().close();
+            // close connection
+            statement.close();
+            makeConnection().close();
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -91,34 +112,122 @@ public class LoginForm extends JDialog {
         return user;
     }
 
-    public Connection makeConnection(){
-        databaseConnection = new DatabaseConnection();
-        return databaseConnection.getConnection();
-    }
-    public void closeConnection() throws SQLException{
-        statement.close();
-        makeConnection().close();
+    private String getHashedPassword(String password){
+        MessageDigest md;
+        try {
+            // it;s not case-sensitive
+            md = MessageDigest.getInstance("SHA-256");
+        } catch (NoSuchAlgorithmException e) {
+            throw new IllegalArgumentException(e);
+        }
+        byte [] messageDigest = md.digest(password.getBytes(StandardCharsets.UTF_8));
+
+        BigInteger bigint = new BigInteger(1, messageDigest);
+        // hp = hashed password
+        String hp = bigint.toString(16);
+        while (hp.length() < 32) {
+            hp = "0".concat(hp);
+        }
+
+        return hp;
     }
 
-//    public static void main(String[] args) {
-//        LoginForm loginForm = new LoginForm(null);
-//        User user = loginForm.user;
-//
-//        if(user!=null){
-//            System.out.println("Successful Authentication of " + user.name);
-//            System.out.println("\t Email " + user.email);
-//            System.out.println("\t Phone " + user.phone);
-//            System.out.println("\t Address " + user.address);
-////            FirmApplication
-////            JFrame frame = new JFrame("FirmApplication");
-////            frame.setContentPane(new FirmGuiApplication().getPanel());
-////            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-////            frame.pack();
-////            frame.setVisible(true);
-//        } else {
-//            System.out.println("Authentication Canceled");
-//        }
-//
-//    }
+
+    public void test(String password) throws NoSuchAlgorithmException, InvalidKeySpecException {
+        String  originalPassword = password;
+//        String  originalPassword = "password";
+
+        String generatedSecuredPasswordHash = generateStrongPasswordHash(originalPassword);
+        System.out.println(generatedSecuredPasswordHash);
+
+        String  originalPassword1 = " ";
+
+        String generatedSecuredPasswordHash1 = generateStrongPasswordHash(originalPassword1);
+        System.out.println("Space password: " + generatedSecuredPasswordHash1);
+
+//        boolean matched = validatePassword("password", generatedSecuredPasswordHash);
+        boolean matched = validatePassword(password, generatedSecuredPasswordHash);
+        System.out.println(matched);
+
+        matched = validatePassword("password1", generatedSecuredPasswordHash);
+        System.out.println(matched);
+    }
+
+    private static String generateStrongPasswordHash(String password)
+            throws NoSuchAlgorithmException, InvalidKeySpecException
+    {
+        int iterations = 1000;
+        char[] chars = password.toCharArray();
+        byte[] salt = getSalt();
+
+        PBEKeySpec spec = new PBEKeySpec(chars, salt, iterations, 64 * 8);
+        SecretKeyFactory skf = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
+
+        byte[] hash = skf.generateSecret(spec).getEncoded();
+        return iterations + ":" + toHex(salt) + ":" + toHex(hash);
+    }
+
+    private static byte[] getSalt() throws NoSuchAlgorithmException
+    {
+        SecureRandom sr = SecureRandom.getInstance("SHA1PRNG");
+        byte[] salt = new byte[16];
+        sr.nextBytes(salt);
+        return salt;
+    }
+
+    private static String toHex(byte[] array) throws NoSuchAlgorithmException
+    {
+        BigInteger bi = new BigInteger(1, array);
+        String hex = bi.toString(16);
+
+        int paddingLength = (array.length * 2) - hex.length();
+        if(paddingLength > 0)
+        {
+            return String.format("%0"  +paddingLength + "d", 0) + hex;
+        }else{
+            return hex;
+        }
+    }
+
+    private static boolean validatePassword(String originalPassword, String storedPassword)
+            throws NoSuchAlgorithmException, InvalidKeySpecException
+    {
+        String[] parts = storedPassword.split(":");
+        int iterations = Integer.parseInt(parts[0]);
+
+        byte[] salt = fromHex(parts[1]);
+        byte[] hash = fromHex(parts[2]);
+
+        PBEKeySpec spec = new PBEKeySpec(originalPassword.toCharArray(),
+                salt, iterations, hash.length * 8);
+        SecretKeyFactory skf = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
+        byte[] testHash = skf.generateSecret(spec).getEncoded();
+
+        int diff = hash.length ^ testHash.length;
+        for(int i = 0; i < hash.length && i < testHash.length; i++)
+        {
+            diff |= hash[i] ^ testHash[i];
+        }
+        return diff == 0;
+    }
+
+    private static byte[] fromHex(String hex) throws NoSuchAlgorithmException
+    {
+        byte[] bytes = new byte[hex.length() / 2];
+        for(int i = 0; i < bytes.length ;i++)
+        {
+            bytes[i] = (byte)Integer.parseInt(hex.substring(2 * i, 2 * i + 2), 16);
+        }
+        return bytes;
+    }
+    public Connection makeConnection(){
+        DatabaseConnectionFactory databaseConnectionFactory = new DatabaseConnectionFactory();
+
+        return databaseConnectionFactory.getConnection();
+    }
+
+    public static void main(String[] args) {
+        LoginForm loginForm = new LoginForm(null);
+    }
 
 }

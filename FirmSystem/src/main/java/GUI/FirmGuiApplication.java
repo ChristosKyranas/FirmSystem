@@ -1,14 +1,15 @@
 package GUI;
 
+import GUI.Dialogs.FirmForm;
 import GUI.initializer.InitializerBranchJScrollPane;
 import GUI.initializer.InitializerEmployeeJScrollPane;
 import GUI.initializer.InitializerFirmJScrollPane;
 import domain.Branch;
-import domain.PersonalInfo;
+import domain.User;
 import service.BranchServiceImpl;
 import service.EmployeeServiceImpl;
 import service.FirmServiceImpl;
-import service.PersonalInfoServiceImpl;
+//import service.PersonalInfoServiceImpl;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -18,7 +19,7 @@ import java.awt.event.MouseEvent;
 import java.util.List;
 
 public class FirmGuiApplication {
-    private JPanel panel;
+    private JPanel appPanel;
     private JTabbedPane tabbedPane1;
     //-----------------------Firm--------------------
     private JList listFirm;
@@ -26,7 +27,7 @@ public class FirmGuiApplication {
     private JButton buttonCreateFirm;
     private JButton buttonSearchFirm;
     private JButton buttonDeleteFirm;
-    private JTextField textFirmName;
+    private JTextField textSearchFirmName;
     private JTextField textCountCountries;
     private JTextField textCountBranches;
     private JTextField textSelectedFirmName;
@@ -78,6 +79,7 @@ public class FirmGuiApplication {
     private JTextField textEmployeeFirm;
     private JScrollPane FormJScrollPane;
     private JLabel Firm;
+    private JButton buttonProfile;
     //--------------------Additional-----------------
     //selectedFirm is the selected value from listFirm
     private static String selectedFirm = "";
@@ -92,11 +94,11 @@ public class FirmGuiApplication {
     private static String selectedEmployeeBranch = "";
 
     public JPanel getPanel() {
-        return panel;
+        return appPanel;
     }
 
     public void setPanel(JPanel panel) {
-        this.panel = panel;
+        this.appPanel = panel;
     }
 
     public JList getListBranch() {
@@ -123,12 +125,13 @@ public class FirmGuiApplication {
         this.listEmployee = listEmployee;
     }
 
-    public FirmGuiApplication() {
+    public FirmGuiApplication(User current_user) {
+
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()){
                 if ("Nimbus".equals(info.getName())){
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    SwingUtilities.updateComponentTreeUI(panel);
+                    SwingUtilities.updateComponentTreeUI(appPanel);
                     break;
                 }
             }
@@ -143,6 +146,12 @@ public class FirmGuiApplication {
         buttonsBranchPage();
         activeMouseListener();
 
+        buttonProfile.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ProfileForm profileForm = new ProfileForm(null, current_user);
+            }
+        });
     }
 
     public void initializeFirmJScrollPane(){
@@ -204,30 +213,30 @@ public class FirmGuiApplication {
                 selectedEmployeeFatherName,
                 selectedEmployeeBranch);
 
-        PersonalInfoServiceImpl personalInfoService = new PersonalInfoServiceImpl();
-        PersonalInfo personalInfo = personalInfoService.findSelectedPersonalInfo(id);
+//        PersonalInfoServiceImpl personalInfoService = new PersonalInfoServiceImpl();
+//        PersonalInfo personalInfo = personalInfoService.findSelectedPersonalInfo(id);
 
         DefaultListModel model = new DefaultListModel();
         new JList(model);
 
-        textEmployeeName.setText(personalInfo.getName());
-        textEmployeeSurname.setText(personalInfo.getSurName());
-        textEmployeeFatherName.setText(personalInfo.getFatherName());
-        textEmployeeMotherName.setText(personalInfo.getMotherName());
-        textEmployeeIdentity.setText(personalInfo.getId());
-        textEmployeeAfm.setText(String.valueOf(personalInfo.getAfm()));
-        textEmployeeAmka.setText(String.valueOf(personalInfo.getAmka()));
-        textEmployeeAddress.setText(personalInfo.getAddress());
-        textEmployeeAge.setText(String.valueOf(personalInfo.getAge()));
-        textEmployeeCity.setText(personalInfo.getCity());
-        textEmployeeCountry.setText(personalInfo.getCountry());
-        textEmployeePostCode.setText(String.valueOf(personalInfo.getPostCode()));
+//        textEmployeeName.setText(personalInfo.getName());
+//        textEmployeeSurname.setText(personalInfo.getSurName());
+//        textEmployeeFatherName.setText(personalInfo.getFatherName());
+//        textEmployeeMotherName.setText(personalInfo.getMotherName());
+//        textEmployeeIdentity.setText(personalInfo.getId());
+//        textEmployeeAfm.setText(String.valueOf(personalInfo.getAfm()));
+//        textEmployeeAmka.setText(String.valueOf(personalInfo.getAmka()));
+//        textEmployeeAddress.setText(personalInfo.getAddress());
+//        textEmployeeAge.setText(String.valueOf(personalInfo.getAge()));
+//        textEmployeeCity.setText(personalInfo.getCity());
+//        textEmployeeCountry.setText(personalInfo.getCountry());
+//        textEmployeePostCode.setText(String.valueOf(personalInfo.getPostCode()));
 
     }
 
     public void getSelectedBranchInfo(String name, String country, String city){
         BranchServiceImpl branchService = new BranchServiceImpl();
-        Branch branch = branchService.findSelectedBranch(name, country, city);
+        Branch branch = branchService.getSelectedBranch(name, country, city);
         DefaultListModel model = new DefaultListModel();
         new JList(model);
 
@@ -256,10 +265,13 @@ public class FirmGuiApplication {
         buttonCreateFirm.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                String text = textFirmName.getText();
-                System.out.println(text);
-                FirmServiceImpl firmService = new FirmServiceImpl();
-                firmService.addFirm(text);
+
+                FirmForm firmForm = new FirmForm(null);
+
+//                String text = textSearchFirmName.getText();
+//                System.out.println(text);
+//                FirmServiceImpl firmService = new FirmServiceImpl();
+//                firmService.addFirm(text);
                 initializeFirmJScrollPane();
                 activeMouseListener();
             }
@@ -268,7 +280,7 @@ public class FirmGuiApplication {
         buttonSearchFirm.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                String text = textFirmName.getText();
+                String text = textSearchFirmName.getText();
                 Boolean found = false;
                 int foundPosition = -1;
                 System.out.println(text);

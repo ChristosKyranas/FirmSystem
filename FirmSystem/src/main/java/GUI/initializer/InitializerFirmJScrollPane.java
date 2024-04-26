@@ -23,7 +23,7 @@ public class InitializerFirmJScrollPane {
     public InitializerFirmJScrollPane(JScrollPane jScrollPane) {
 
         firmService = new FirmServiceImpl();
-        firm = firmService.findAllFirm();
+        firm = firmService.getAllFirms();
         model = new DefaultListModel();
         jList = new JList(model);
 

@@ -1,22 +1,17 @@
 package service;
 
+import GUI.Dialogs.CreateMessageGui;
 import domain.Branch;
-import utils.DatabaseConnection;
+import factory.DatabaseConnectionFactory;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import javax.swing.*;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.mysql.cj.util.StringUtils.isNullOrEmpty;
-
 public class BranchServiceImpl implements BranchService {
 
-    private static final String RETURN_ALL_BRANCHES = "Select * " +
-                                                      "from company.branch " +
-                                                      "order by name asc";
+    private static final String GET_ALL_BRANCHES = "SELECT * FROM company.branch ORDER BY name ASC";
     private static final String BRANCH_ID = "branch_id";
     private static final String NAME = "name";
     private static final String ADDRESS = "address";
@@ -26,23 +21,33 @@ public class BranchServiceImpl implements BranchService {
     private static final String WORTH = "worth";
     private static final String ESTABLISHMENT = "establishment";
     private static final String FIRM = "firm";
-    private DatabaseConnection databaseConnection = null;
+    private DatabaseConnectionFactory databaseConnectionFactory = null;
     private Connection conn = null;
     private Statement statement = null;
-    private ResultSet rs = null;
+//    private ResultSet rs = null;
     private String query = "";
     /*HashMap<Integer, Branch>*/
+    private JScrollPane branchJScrollPane;
 
-    public List<Branch> findAllBranch(){
+    /**
+     * Get all branches from Database
+     * @return List<Branch>
+     */
+    public List<Branch> getAllBranch(){
         //HashMap<Integer, Branch> branchHashMap = new HashMap<>();
         List<Branch> orderedListBranch = new ArrayList<>();
         try {
-            statement = makeConnection().createStatement();
-            rs = statement.executeQuery(RETURN_ALL_BRANCHES);
+            Statement statement = makeConnection().createStatement();
+            ResultSet rs = statement.executeQuery(GET_ALL_BRANCHES);
+
             while(rs.next()){
              //   branchHashMap.put(Integer.valueOf(rs.getString(BRANCH_ID)), getBranch());
-                orderedListBranch.add(getBranch());
+                orderedListBranch.add(getBranch(rs));
             }
+
+            // close connection
+            statement.close();
+            makeConnection().close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -51,17 +56,23 @@ public class BranchServiceImpl implements BranchService {
         return orderedListBranch;
     }
 
+    /**
+     * Add new Branch in Database - Check if exists
+     * @param branch
+     */
     public void addBranch(Branch branch){
         try{
-            statement = makeConnection().createStatement();
+            Statement statement = makeConnection().createStatement();
             //------------CHECK------------
 //            if(branch.getName()!=null && branch.getAddress()!=null && branch.getCity()!=null && branch.getCountry()!=null && branch.getEstablishment()!=null ){
             System.out.println("test");
             System.out.println(branch.getName());
-            query = "select * " +
-                    "from company.branch where name='"+ branch.getName()+"'";
+            String query = "SELECT * FROM company.branch WHERE name=?";
+            PreparedStatement preparedStatement = makeConnection().prepareStatement(query);
+            preparedStatement.setString(1, branch.getName());
+
             System.out.println(query);
-            rs = statement.executeQuery(query);
+            ResultSet rs = statement.executeQuery(query);
 //                    "select * " +
 //                    "from company.branch" +
 ////                    "where name = '"+ branch.getName()+
@@ -86,11 +97,18 @@ public class BranchServiceImpl implements BranchService {
                 System.out.println(query);
                 statement.executeUpdate(query);
             }
+
+            // close connection
+            statement.close();
+            makeConnection().close();
+
             //name - country - city
             //if it exists -> reject it
             //query = null
             //otherwise -> add it
+            new CreateMessageGui(branchJScrollPane, "test");
         }catch (SQLException e){
+            new CreateMessageGui(branchJScrollPane, "test");
             System.out.println("Error Code: " + e.getErrorCode());
             System.out.println("SQL State: " + e.getSQLState());
             System.out.println("Message: " + e.getMessage());
@@ -101,18 +119,22 @@ public class BranchServiceImpl implements BranchService {
     }
 
 
-    public Branch findSelectedBranch(String selectedBranch, String country, String city){
+    public Branch getSelectedBranch(String selectedBranch, String country, String city){
         try {
-            statement = makeConnection().createStatement();
-            query = "Select * " +
+            Statement statement = makeConnection().createStatement();
+            String query = "Select * " +
                     "from company.branch c " +
                     "where c.name = '"+ selectedBranch + "' " +
                         "and c.country = '" + country + "' " +
                         "and c.city = '" + city + "'";
-            rs = statement.executeQuery(query);
+            ResultSet rs = statement.executeQuery(query);
             while(rs.next()){
-                return getBranch();
+                return getBranch(rs);
             }
+
+            // close connection
+            statement.close();
+            makeConnection().close();
         } catch (SQLException e) {
             System.out.println("Error Code: " + e.getErrorCode());
             System.out.println("SQL State: " + e.getSQLState());
@@ -124,16 +146,20 @@ public class BranchServiceImpl implements BranchService {
         return null;
     }
 
-    public Branch findSelectedBranch(int selectedBranch){
+    public Branch getSelectedBranch(int selectedBranch){
         try {
-            statement = makeConnection().createStatement();
-            query = "Select * " +
+            Statement statement = makeConnection().createStatement();
+            String query = "Select * " +
                     "from company.branch c " +
                     "where c.branch_id = "+ selectedBranch ;
-            rs = statement.executeQuery(query);
+            ResultSet rs = statement.executeQuery(query);
             while(rs.next()){
                 return getBranch();
             }
+
+            // close connection
+            statement.close();
+            makeConnection().close();
         } catch (SQLException e) {
             System.out.println("Error Code: " + e.getErrorCode());
             System.out.println("SQL State: " + e.getSQLState());
@@ -147,14 +173,18 @@ public class BranchServiceImpl implements BranchService {
 
     public void removeBranch(String selectedBranch, String country, String city){
         try {
-            statement = makeConnection().createStatement();
-            query =  "delete  " +
+            Statement statement = makeConnection().createStatement();
+            String query =  "delete  " +
                      "from company.branch " +
                      "where name = '"+ selectedBranch + "' " +
                             "and country = '" + country +"' " +
                             "and city = '" + city + "'" ;
             System.out.println(query);
             statement.executeUpdate(query);
+
+            // close connection
+            statement.close();
+            makeConnection().close();
         } catch (SQLException e) {
             System.out.println("Error Code: " + e.getErrorCode());
             System.out.println("SQL State: " + e.getSQLState());
@@ -165,8 +195,25 @@ public class BranchServiceImpl implements BranchService {
         }
     }
 
+    @Override
     public Branch getBranch() throws SQLException {
+//        Branch branch = new Branch();
+//
+//        branch.setName(rs.getString(NAME));
+//        branch.setAddress(rs.getString(ADDRESS));
+//        branch.setCity(rs.getString(CITY));
+//        branch.setCountry(rs.getString(COUNTRY));
+//        branch.setBudget(Double.valueOf(rs.getString(BUDGET)));
+//        branch.setWorth(Double.valueOf(rs.getString(WORTH)));
+//        branch.setEstablishment(rs.getString(ESTABLISHMENT));
+//        branch.setFirm(Integer.valueOf(rs.getString(FIRM)));
+
+        return null;
+    }
+
+    public Branch getBranch(ResultSet rs) throws SQLException {
         Branch branch = new Branch();
+
         branch.setName(rs.getString(NAME));
         branch.setAddress(rs.getString(ADDRESS));
         branch.setCity(rs.getString(CITY));
@@ -175,12 +222,13 @@ public class BranchServiceImpl implements BranchService {
         branch.setWorth(Double.valueOf(rs.getString(WORTH)));
         branch.setEstablishment(rs.getString(ESTABLISHMENT));
         branch.setFirm(Integer.valueOf(rs.getString(FIRM)));
+
         return branch;
     }
 
 
     public Connection makeConnection(){
-        databaseConnection = new DatabaseConnection();
-        return databaseConnection.getConnection();
+        DatabaseConnectionFactory databaseConnectionFactory = new DatabaseConnectionFactory();
+        return databaseConnectionFactory.getConnection();
     }
 }

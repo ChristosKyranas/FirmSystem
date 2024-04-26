@@ -17,7 +17,7 @@ public class InitializerBranchJScrollPane {
     public InitializerBranchJScrollPane(JScrollPane jScrollPane) {
 
         branchService = new BranchServiceImpl();
-        branch = branchService.findAllBranch();
+        branch = branchService.getAllBranch();
         model = new DefaultListModel();
         jList = new JList(model);
         /*for ( int i : branch.keySet()){

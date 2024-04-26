@@ -1,7 +1,7 @@
 package service;
 
 import domain.PersonalInfo;
-import utils.DatabaseConnection;
+import factory.DatabaseConnectionFactory;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -25,7 +25,7 @@ public class PersonalInfoServiceImpl implements PersonalInfoService {
     private static final String POST_CODE = "post_code";
     private static final String EMPLOYEE = "employee";
 
-    private DatabaseConnection databaseConnection = null;
+    private DatabaseConnectionFactory databaseConnectionFactory = null;
     private Connection conn = null;
     private Statement statement = null;
     private ResultSet rs = null;
@@ -67,7 +67,7 @@ public class PersonalInfoServiceImpl implements PersonalInfoService {
     }
 
     public Connection makeConnection(){
-        databaseConnection = new DatabaseConnection();
-        return databaseConnection.getConnection();
+        databaseConnectionFactory = new DatabaseConnectionFactory();
+        return databaseConnectionFactory.getConnection();
     }
 }
