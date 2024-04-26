@@ -5,6 +5,7 @@ import service.FirmServiceImpl;
 import javax.swing.*;
 import java.awt.*;
 
+import static enumaration.MessageEnum.INVALID_ALPHANUMERICAL_FIRM_NAME;
 import static enumaration.MessageEnum.INVALID_EMPTY_FIRM_NAME;
 import static utils.ANSI.*;
 
@@ -25,10 +26,11 @@ public class FirmForm extends JDialog  {
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
 
-        saveFirm.addActionListener(e -> setFirm());
+        saveFirm.addActionListener(e -> addFirm());
 
         saveAndCloseFirm.addActionListener(e -> {
-			if (setFirm()){
+            // save then release resources
+			if (addFirm()){
 				dispose();
 			}
 		});
@@ -41,7 +43,12 @@ public class FirmForm extends JDialog  {
         setVisible(true);
     }
 
-    public boolean setFirm(){
+    /**
+     * Insert Firm in Database
+     *
+     * @return boolean
+     */
+    public boolean addFirm(){
         String text = textFirmName.getText();
 
         System.out.println("---------------------------------------");
@@ -54,14 +61,15 @@ public class FirmForm extends JDialog  {
 
         if(text.equals("")) {
             System.out.println(INVALID_EMPTY_FIRM_NAME.getMessage());
-            // display error message to user
+            // display pop-up error message to user
             JOptionPane.showMessageDialog(FirmForm.this,
                     "Firm name cannot be empty",
                     "Try Again",
                     JOptionPane.ERROR_MESSAGE);
             return false;
         } else if (!isAlphaNumeric(text)) {
-            // display error message to user
+            System.out.println(INVALID_ALPHANUMERICAL_FIRM_NAME.getMessage());
+            // display pop-up error message to user
             JOptionPane.showMessageDialog(FirmForm.this,
                     "Firm name must be alphanumerical",
                     "Try Again",
@@ -73,10 +81,14 @@ public class FirmForm extends JDialog  {
             firmService.addFirm(text, FirmForm.this);
             return true;
         }
-//                initializeFirmJScrollPane();
-//                activeMouseListener();
+
 	}
 
+    /**
+     * Check if matches the pattern
+     * @param s
+     * @return boolean
+     */
     public boolean isAlphaNumeric(String s){
         // is alpha or numeric or char "&"
         String pattern= "^[a-zA-Z0-9&]*$";
@@ -84,6 +96,7 @@ public class FirmForm extends JDialog  {
 
         return s.matches(pattern);
     }
+
 
     public static void main(String[] args) {
         FirmForm firmForm = new FirmForm(null);

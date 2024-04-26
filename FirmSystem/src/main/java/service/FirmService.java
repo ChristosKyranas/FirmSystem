@@ -12,7 +12,7 @@ public interface FirmService {
 
     void removeFirm(String firmName);
 
-    List<String> findSelectedFirm(String selectedFirm);
+    List<String> getFirm(String selectedFirm);
 
     Connection makeConnection();
 
