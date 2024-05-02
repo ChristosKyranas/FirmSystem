@@ -1,8 +1,6 @@
 package factory;
 
-
-
-import domain.Database;
+import utils.DatabaseConfiguration;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -15,7 +13,7 @@ public class DatabaseConnectionFactory {
 
     public static Connection getConnection() {
         try {
-            Database database = loadDatabaseConfiguration();
+            DatabaseConfiguration database = loadDatabaseConfiguration();
             return DriverManager.getConnection(
                     database.getDatabaseUrl(),
                     database.getUsername(),
@@ -27,13 +25,13 @@ public class DatabaseConnectionFactory {
 
     }
 
-    private static Database loadDatabaseConfiguration() {
+    private static DatabaseConfiguration loadDatabaseConfiguration() {
         Properties properties = new Properties();
         InputStream input = DatabaseConnectionFactory.class.getClassLoader().getResourceAsStream("application.properties");
         try {
             properties.load(input);
 
-            return new Database(
+            return new DatabaseConfiguration(
                     properties.getProperty("database_user"),
                     properties.getProperty("database_password"),
                     properties.getProperty("database_url")

@@ -1,22 +1,23 @@
-package GUI.initializer;
+package service.impl;
 
-import domain.Branch;
-import service.BranchServiceImpl;
+import model.Branch;
+import repository.BranchRepository;
+import service.InitializionJScrollPaneService;
 
 import javax.swing.*;
 import java.util.List;
 
-public class InitializerBranchJScrollPane {
+public class InitializerBranchJScrollPane extends InitializionJScrollPaneService {
 
     private JList jList;
     private DefaultListModel model;
-    private BranchServiceImpl branchService;
+    private BranchRepository branchService;
     //private HashMap<Integer, Branch> branch;
     private List<Branch> branch;
 
     public InitializerBranchJScrollPane(JScrollPane jScrollPane) {
 
-        branchService = new BranchServiceImpl();
+        branchService = new BranchRepository();
         branch = branchService.getAllBranch();
         model = new DefaultListModel();
         jList = new JList(model);

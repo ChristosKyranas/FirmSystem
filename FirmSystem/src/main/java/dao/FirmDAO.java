@@ -1,10 +1,10 @@
-package service;
+package dao;
 
 import java.awt.*;
 import java.sql.Connection;
 import java.util.List;
 
-public interface FirmService {
+public interface FirmDAO {
 
     List<String> getAllFirms();
 

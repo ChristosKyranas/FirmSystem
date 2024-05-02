@@ -1,9 +1,10 @@
-package domain;
+package model;
 
 public class Firm {
 
     private int firmId;
     private String name;
+    private int active;
 
     public int getFirmId() {
         return firmId;
@@ -19,6 +20,12 @@ public class Firm {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Firm(int firmId, String name, int active) {
+        this.firmId = firmId;
+        this.name = name;
+        this.active = active;
     }
 
     @Override

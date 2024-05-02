@@ -1,12 +1,12 @@
-package domain;
+package utils;
 
-public class Database {
+public class DatabaseConfiguration {
 
     private String username;
     private String password;
     private String databaseUrl;
 
-    public Database(String database_user, String database_password, String database_url) {
+    public DatabaseConfiguration(String database_user, String database_password, String database_url) {
         this.username = database_user;
         this.password = database_password;
         this.databaseUrl = database_url;

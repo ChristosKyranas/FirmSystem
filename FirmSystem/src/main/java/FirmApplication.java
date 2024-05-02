@@ -1,6 +1,6 @@
 import GUI.Dialogs.LoginForm;
 import GUI.FirmGuiApplication;
-import domain.User;
+import model.User;
 
 import javax.swing.*;
 

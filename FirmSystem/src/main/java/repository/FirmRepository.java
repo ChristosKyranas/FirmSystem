@@ -1,4 +1,4 @@
-package service;
+package repository;
 
 import factory.DatabaseConnectionFactory;
 
@@ -9,9 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static enumaration.MessageEnum.DUPLICATE_ENTRY_FIRM_NAME;
-import static enumaration.MessageEnum.INVALID_EMPTY_FIRM_NAME;
 
-public class FirmServiceImpl implements FirmService {
+public class FirmRepository implements dao.FirmDAO {
 
     // 0 -> delete or 1 -> active
     private static final int DELETE_OR_ACTIVE = 0;
@@ -52,6 +51,8 @@ public class FirmServiceImpl implements FirmService {
             statement.close();
             makeConnection().close();
         } catch (SQLException e) {
+            // getMessage
+
             e.printStackTrace();
         }
         //System.out.println("Firms: " + firmHashMap.toString());
@@ -66,12 +67,8 @@ public class FirmServiceImpl implements FirmService {
      * @param FirmForm
      */
     public void addFirm(String firmName, Component FirmForm){
-//        int id = 1;
         try {
             Statement statement = makeConnection().createStatement();
-//            ResultSet rs = statement.executeQuery("SELECT max(firm_id) AS id FROM company.firm;");
-//            System.out.println(rs);
-//            System.out.println(id);
             String query = "INSERT INTO company.firm (name) VALUES ('" + firmName + "');";
 
             statement.executeUpdate(query);
@@ -103,8 +100,7 @@ public class FirmServiceImpl implements FirmService {
             Statement statement = makeConnection().createStatement();
 //            String query = "DELETE FROM company.firm WHERE name = '"+ firmName +"'";
 
-            String query;
-            query = (DELETE_OR_ACTIVE == 0 ) ? "DELETE FROM company.firm WHERE name = '"+ firmName +"'" : "UPDATE company.firm SET active = 0 WHERE name = '"+ firmName +"'";
+            String query = (DELETE_OR_ACTIVE == 0 ) ? "DELETE FROM company.firm WHERE name = '"+ firmName +"'" : "UPDATE company.firm SET active = 0 WHERE name = '"+ firmName +"'";
 
             System.out.println(query);
             statement.executeUpdate(query);
@@ -122,8 +118,8 @@ public class FirmServiceImpl implements FirmService {
         try {
             Statement statement = makeConnection().createStatement();
             String query = "select count( b.name ) as FirmBranches , sum( b.worth ) as FirmWorth , count( distinct  b.country ) as FirmCountries\n" +
-                    "from company.branch b , company.firm f \n" +
-                    "where b.firm = f.firm_id and f.name = '"+ selectedFirm + "'";
+                            "from company.branch b , company.firm f \n" +
+                            "where b.firm = f.firm_id and f.name = '"+ selectedFirm + "'";
             ResultSet rs = statement.executeQuery( query);
             while(rs.next()){
                 firm.add(rs.getString("FirmBranches"));
@@ -136,6 +132,8 @@ public class FirmServiceImpl implements FirmService {
             statement.close();
             makeConnection().close();
         } catch (SQLException e) {
+            // getMessage
+
             e.printStackTrace();
         }
         return null;

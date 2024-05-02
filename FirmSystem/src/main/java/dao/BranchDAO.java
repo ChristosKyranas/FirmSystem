@@ -1,13 +1,13 @@
-package service;
+package dao;
 
-import domain.Branch;
+import model.Branch;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-public interface BranchService {
+public interface BranchDAO {
 
     List<Branch> getAllBranch();
 

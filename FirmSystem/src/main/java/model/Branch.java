@@ -1,8 +1,5 @@
-package domain;
+package model;
 
-
-
-import java.util.List;
 
 public class Branch {
 
@@ -14,10 +11,39 @@ public class Branch {
     private double budget;
     private double worth;
     private String establishment;
+    // foreign key to Firm
     private int firm;
 
-    private List<Branch> listBranch;
+    /**
+     * Constructor - none parameter
+     */
+    public Branch() {
+    }
 
+    /**
+     * Constructor - all parameters
+     *
+     * @param branchId
+     * @param name
+     * @param address
+     * @param city
+     * @param country
+     * @param budget
+     * @param worth
+     * @param establishment
+     * @param firm
+     */
+    public Branch(int branchId, String name, String address, String city, String country, double budget, double worth, String establishment, int firm) {
+        this.branchId = branchId;
+        this.name = name;
+        this.address = address;
+        this.city = city;
+        this.country = country;
+        this.budget = budget;
+        this.worth = worth;
+        this.establishment = establishment;
+        this.firm = firm;
+    }
 
     public String getCity() {
         return city;
@@ -43,7 +69,6 @@ public class Branch {
         this.worth = worth;
     }
 
-
     public int getFirm() {
         return firm;
     }
@@ -52,9 +77,6 @@ public class Branch {
         this.firm = firm;
     }
 
-    public void setListBranch(List<Branch> listBranch) {
-        this.listBranch = listBranch;
-    }
 
     public int getBranchId() {
         return branchId;

@@ -1,6 +1,7 @@
-package service;
+package repository;
 
-import domain.Employee;
+import dao.EmployeeDAO;
+import model.Employee;
 import factory.DatabaseConnectionFactory;
 
 import java.sql.Connection;
@@ -10,7 +11,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EmployeeServiceImpl implements EmployeeService {
+public class EmployeeRepository implements EmployeeDAO {
 
 //    private static final String RETURN_ALL_EMPLOYEES = "Select * from company.employee";
 //

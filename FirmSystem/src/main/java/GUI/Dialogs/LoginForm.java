@@ -1,6 +1,6 @@
 package GUI.Dialogs;
 
-import domain.User;
+import model.User;
 import factory.DatabaseConnectionFactory;
 
 import javax.crypto.SecretKeyFactory;

@@ -1,6 +1,6 @@
 package GUI;
 
-import domain.User;
+import model.User;
 
 import javax.swing.*;
 import java.awt.*;

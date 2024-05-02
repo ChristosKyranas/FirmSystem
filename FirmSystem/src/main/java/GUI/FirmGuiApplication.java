@@ -1,14 +1,14 @@
 package GUI;
 
 import GUI.Dialogs.FirmForm;
-import GUI.initializer.InitializerBranchJScrollPane;
-import GUI.initializer.InitializerEmployeeJScrollPane;
-import GUI.initializer.InitializerFirmJScrollPane;
-import domain.Branch;
-import domain.User;
-import service.BranchServiceImpl;
-import service.EmployeeServiceImpl;
-import service.FirmServiceImpl;
+import service.impl.InitializerBranchJScrollPane;
+import service.impl.InitializerEmployeeJScrollPane;
+import service.impl.InitializerFirmJScrollPane;
+import model.Branch;
+import model.User;
+import repository.BranchRepository;
+import repository.EmployeeRepository;
+import repository.FirmRepository;
 //import service.PersonalInfoServiceImpl;
 
 import javax.swing.*;
@@ -206,7 +206,7 @@ public class FirmGuiApplication {
     }
 
     public void getEmployeeInfo(){
-        EmployeeServiceImpl employeeService = new EmployeeServiceImpl();
+        EmployeeRepository employeeService = new EmployeeRepository();
         int id = 0;
         id = employeeService.findSelectedEmployee(selectedEmployeeName,
                 selectedEmployeeSurName,
@@ -235,7 +235,7 @@ public class FirmGuiApplication {
     }
 
     public void getBranchInfo(String name, String country, String city){
-        BranchServiceImpl branchService = new BranchServiceImpl();
+        BranchRepository branchService = new BranchRepository();
         Branch branch = branchService.getSelectedBranch(name, country, city);
         DefaultListModel model = new DefaultListModel();
         new JList(model);
@@ -251,7 +251,7 @@ public class FirmGuiApplication {
     }
 
     public void getFirmInfo(String name){
-        FirmServiceImpl firmService = new FirmServiceImpl();
+        FirmRepository firmService = new FirmRepository();
         List<String> firm = firmService.getFirm(name);
         DefaultListModel model = new DefaultListModel();
         new JList(model);
@@ -305,7 +305,7 @@ public class FirmGuiApplication {
                 if(!selectedFirm.equals("")){
                     switch (JOptionPane.showConfirmDialog(buttonDeleteFirm,"Do you want to delete this Firm?", "Delete a Firm", JOptionPane.YES_NO_OPTION)) {
                         case JOptionPane.YES_OPTION:
-                            FirmServiceImpl firmService = new FirmServiceImpl();
+                            FirmRepository firmService = new FirmRepository();
                             firmService.removeFirm(selectedFirm);
                             initializeFirmJScrollPane();
                             // when I delete a firm, delete on cascade its branches
@@ -342,7 +342,7 @@ public class FirmGuiApplication {
                 //return firm_id depend on name
                 branch.setFirm(Integer.parseInt(textBranchFirm.getText()));
 
-                BranchServiceImpl branchService = new BranchServiceImpl();
+                BranchRepository branchService = new BranchRepository();
                 branchService.addBranch(branch);
 
                 initializeBranchJScrollPane();
@@ -358,7 +358,7 @@ public class FirmGuiApplication {
                             "Do you want to delete this Branch?", "Delete a Firm",
                             JOptionPane.YES_NO_OPTION)) {
                         case JOptionPane.YES_OPTION:
-                            BranchServiceImpl branchService = new BranchServiceImpl();
+                            BranchRepository branchService = new BranchRepository();
                             branchService.removeBranch(selectedBranchName, selectedBranchCountry, selectedBranchCity);
                             initializeBranchJScrollPane();
                             activeMouseListener();

@@ -1,8 +1,8 @@
-package service;
+package dao;
 
 import java.sql.Connection;
 
-public interface EmployeeService {
+public interface EmployeeDAO {
 
   /*  HashMap<Integer, Branch> findAllBranch();
 

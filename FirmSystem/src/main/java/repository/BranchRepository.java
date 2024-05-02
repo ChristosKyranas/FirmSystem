@@ -1,10 +1,7 @@
-package service;
+package repository;
 
-import GUI.Dialogs.CreateMessageGui;
-import GUI.Dialogs.LoginForm;
-import domain.Branch;
+import model.Branch;
 import factory.DatabaseConnectionFactory;
-import utils.ANSI;
 
 import javax.swing.*;
 import java.sql.*;
@@ -13,7 +10,7 @@ import java.util.List;
 
 import static utils.ANSI.*;
 
-public class BranchServiceImpl implements BranchService {
+public class BranchRepository implements dao.BranchDAO {
 
     private static final String GET_ALL_BRANCHES = "SELECT * FROM company.branch ORDER BY name ASC";
     private static final String GET_ALL_ACTIVE_BRANCHES = "SELECT * FROM company.branch WHERE active = 1 ORDER BY name ASC";

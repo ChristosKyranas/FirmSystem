@@ -1,6 +1,6 @@
 package GUI.Dialogs;
 
-import service.FirmServiceImpl;
+import repository.FirmRepository;
 
 import javax.swing.*;
 import java.awt.*;
@@ -77,7 +77,7 @@ public class FirmForm extends JDialog  {
             return false;
         } else {
             System.out.println(text);
-            FirmServiceImpl firmService = new FirmServiceImpl();
+            FirmRepository firmService = new FirmRepository();
             firmService.addFirm(text, FirmForm.this);
             return true;
         }

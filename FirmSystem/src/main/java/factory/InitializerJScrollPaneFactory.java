@@ -1,7 +1,7 @@
 package factory;
 
-import GUI.initializer.InitializerBranchJScrollPane;
-import GUI.initializer.InitializerFirmJScrollPane;
+import service.impl.InitializerBranchJScrollPane;
+import service.impl.InitializerFirmJScrollPane;
 
 import javax.swing.*;
 

@@ -1,33 +1,34 @@
-package GUI.initializer;
+package service.impl;
 
-import domain.Branch;
-import domain.Employee;
+import model.Branch;
+import model.Employee;
 //import domain.PersonalInfo;
-import service.BranchServiceImpl;
-import service.EmployeeServiceImpl;
+import repository.BranchRepository;
+import repository.EmployeeRepository;
+import service.InitializionJScrollPaneService;
 //import service.PersonalInfoServiceImpl;
 
 import javax.swing.*;
 import java.util.List;
 
-public class InitializerEmployeeJScrollPane {
+public class InitializerEmployeeJScrollPane extends InitializionJScrollPaneService {
 
     private JList jList;
     private DefaultListModel model;
-    private EmployeeServiceImpl employeeService;
+    private EmployeeRepository employeeService;
 //    private PersonalInfoServiceImpl personalInfoService;
-    private BranchServiceImpl branchService;
+    private BranchRepository branchService;
     private List<Employee> employee;
 //    private PersonalInfo personalInfo;
     private Branch branch;
 
     public InitializerEmployeeJScrollPane(JScrollPane jScrollPane) {
         //fetch all the employees from the database
-        employeeService = new EmployeeServiceImpl();
+        employeeService = new EmployeeRepository();
         employee = employeeService.findAllEmployee();
 
 //        personalInfoService = new PersonalInfoServiceImpl();
-        branchService = new BranchServiceImpl();
+        branchService = new BranchRepository();
 
         model = new DefaultListModel();
         jList = new JList(model);
